@@ -1,0 +1,176 @@
+{
+  "dataset": "NAB realKnownCause/nyc_taxi.csv",
+  "description": "NYC taxi passenger counts, 30-minute buckets; labels are NAB combined anomaly windows.",
+  "generated_utc": "2026-10-13T09:04:33Z",
+  "download_performed": true,
+  "nab": {
+    "repository": "https://github.com/numenta/NAB.git",
+    "commit": "ea702d75cc2258d9d7dd35ca8e5e2539d71f3140",
+    "commit_source": "resolved via `git ls-remote https://github.com/numenta/NAB.git refs/heads/master`",
+    "reference_commit": "ea702d75cc2258d9d7dd35ca8e5e2539d71f3140"
+  },
+  "license": {
+    "name": "Numenta Anomaly Benchmark (NAB) license, MIT-style",
+    "spdx_id": "MIT",
+    "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/LICENSE.txt",
+    "copyright": "Copyright 2014-2024 Numenta Inc.",
+    "sha256": "0a0b4d0b10cb1f7ed9ab2993ef93defc03447e6eba9daca1315dd32dae4877e3",
+    "retrieved_utc": "2026-10-13T09:04:33Z",
+    "data_readme_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/README.md",
+    "license_text_head": "Copyright 2014-2024 Numenta Inc."
+  },
+  "time_encoding": {
+    "convention": "naive source time encoded as UTC-coordinate epoch milliseconds",
+    "step_ms": 1800000,
+    "origin_ms": 1404172800000,
+    "origin_source": "2014-07-01 00:00:00",
+    "note": "technical encoding; not a claim that business time is UTC; local timezone never used"
+  },
+  "files": {
+    "nyc_taxi.csv": {
+      "url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realKnownCause/nyc_taxi.csv",
+      "retrieved_utc": "2026-10-13T09:04:32Z",
+      "sha256": "d8fa6f7f0734bf5c8be12c52a94e20a82664c397d9dec4449156bd453d32856d",
+      "expected_sha256": "d8fa6f7f0734bf5c8be12c52a94e20a82664c397d9dec4449156bd453d32856d",
+      "sha256_match": true,
+      "bytes": 265771,
+      "path": "/Volumes/SSD/projects/dw-periodic-ad/.worktrees/data-prep/data/raw/nyc_taxi.csv"
+    },
+    "combined_windows.json": {
+      "url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/labels/combined_windows.json",
+      "retrieved_utc": "2026-10-13T09:04:32Z",
+      "sha256": "1e1fbc4601321aad8d0f8b3784c8134299379f68f6c1f7777565f8ffd57ab6b1",
+      "expected_sha256": "1e1fbc4601321aad8d0f8b3784c8134299379f68f6c1f7777565f8ffd57ab6b1",
+      "sha256_match": true,
+      "bytes": 15359,
+      "path": "/Volumes/SSD/projects/dw-periodic-ad/.worktrees/data-prep/data/raw/combined_windows.json"
+    },
+    "data_README.md": {
+      "url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/README.md",
+      "retrieved_utc": "2026-10-13T09:04:33Z",
+      "sha256": "1d32963e44a52323b44affff374a1222ebe5ef19ef8f7f6c6fd7a747aa52db30",
+      "expected_sha256": null,
+      "sha256_match": null,
+      "bytes": 2931,
+      "path": "/Volumes/SSD/projects/dw-periodic-ad/.worktrees/data-prep/data/raw/data_README.md"
+    },
+    "LICENSE.txt": {
+      "url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/LICENSE.txt",
+      "retrieved_utc": "2026-10-13T09:04:33Z",
+      "sha256": "0a0b4d0b10cb1f7ed9ab2993ef93defc03447e6eba9daca1315dd32dae4877e3",
+      "expected_sha256": null,
+      "sha256_match": null,
+      "bytes": 1056,
+      "path": "/Volumes/SSD/projects/dw-periodic-ad/.worktrees/data-prep/data/raw/LICENSE.txt"
+    }
+  },
+  "series": {
+    "rows": 10320,
+    "first_timestamp_ms": 1404172800000,
+    "last_timestamp_ms": 1422747000000,
+    "first_source_timestamp": "2014-07-01 00:00:00",
+    "last_source_timestamp": "2015-01-31 23:30:00",
+    "step_ms": 1800000
+  },
+  "label_windows": {
+    "key": "realKnownCause/nyc_taxi.csv",
+    "count": 5,
+    "windows": [
+      {
+        "index": 0,
+        "start_source": "2014-10-30 15:30:00.000000",
+        "end_source": "2014-11-03 22:30:00.000000",
+        "start_ms": 1414683000000,
+        "end_ms": 1415053800000,
+        "boundary_inclusive": true
+      },
+      {
+        "index": 1,
+        "start_source": "2014-11-25 12:00:00.000000",
+        "end_source": "2014-11-29 19:00:00.000000",
+        "start_ms": 1416916800000,
+        "end_ms": 1417287600000,
+        "boundary_inclusive": true
+      },
+      {
+        "index": 2,
+        "start_source": "2014-12-23 11:30:00.000000",
+        "end_source": "2014-12-27 18:30:00.000000",
+        "start_ms": 1419334200000,
+        "end_ms": 1419705000000,
+        "boundary_inclusive": true
+      },
+      {
+        "index": 3,
+        "start_source": "2014-12-29 21:30:00.000000",
+        "end_source": "2015-01-03 04:30:00.000000",
+        "start_ms": 1419888600000,
+        "end_ms": 1420259400000,
+        "boundary_inclusive": true
+      },
+      {
+        "index": 4,
+        "start_source": "2015-01-24 20:30:00.000000",
+        "end_source": "2015-01-29 03:30:00.000000",
+        "start_ms": 1422131400000,
+        "end_ms": 1422502200000,
+        "boundary_inclusive": true
+      }
+    ]
+  },
+  "checks": {
+    "finite": true,
+    "no_empty_values": true,
+    "no_empty_source_timestamps": true,
+    "no_duplicate_timestamps": true,
+    "strictly_increasing": true,
+    "fixed_grid": true,
+    "row_count": 10320,
+    "step_ms": 1800000
+  },
+  "splits": {
+    "train": {
+      "start_source": "2014-07-01 00:00:00",
+      "end_source_exclusive": "2014-09-01 00:00:00",
+      "start_ms": 1404172800000,
+      "end_ms_exclusive": 1409529600000,
+      "rows": 2976,
+      "label_points": 0,
+      "label_windows_overlapping": 0
+    },
+    "validation": {
+      "start_source": "2014-09-01 00:00:00",
+      "end_source_exclusive": "2014-10-16 00:00:00",
+      "start_ms": 1409529600000,
+      "end_ms_exclusive": 1413417600000,
+      "rows": 2160,
+      "label_points": 0,
+      "label_windows_overlapping": 0
+    },
+    "test": {
+      "start_source": "2014-10-16 00:00:00",
+      "end_source_exclusive": "2015-02-01 00:00:00",
+      "start_ms": 1413417600000,
+      "end_ms_exclusive": 1422748800000,
+      "rows": 5184,
+      "label_points": 1035,
+      "label_windows_overlapping": 5
+    }
+  },
+  "correlations": {
+    "segment": "train",
+    "rows": 2976,
+    "lag_daily": 48,
+    "lag_daily_pearson": 0.8483700004798805,
+    "lag_weekly": 336,
+    "lag_weekly_pearson": 0.9670016771643045
+  },
+  "artefacts": {
+    "processed_series": "data/processed/nyc_taxi.csv",
+    "events": "data/processed/events.json",
+    "splits": "data/processed/splits.json",
+    "summary": "results/data-check/summary.json",
+    "overview": "results/data-check/overview.png"
+  },
+  "algorithm_implemented": false
+}

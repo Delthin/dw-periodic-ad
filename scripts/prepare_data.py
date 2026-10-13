@@ -52,9 +52,8 @@ import pandas as pd
 NAB_REPO_URL = "https://github.com/numenta/NAB.git"
 NAB_RAW_BASE = "https://raw.githubusercontent.com/numenta/NAB/{commit}/{path}"
 
-# Reference commit recorded in the course material.  At download time the
-# current master commit is resolved with `git ls-remote`; this value documents
-# the commit the expected hashes were verified against.
+# Commit resolved from NAB master during the first acquisition on 2026-10-13.
+# --skip-ls-remote reuses this fixed commit for later reproduction.
 NAB_REFERENCE_COMMIT = "ea702d75cc2258d9d7dd35ca8e5e2539d71f3140"
 
 STEP_MS = 1_800_000  # 30 minutes
@@ -282,7 +281,7 @@ def download_raw_files(raw_dir: Path, commit: str) -> dict[str, dict]:
             "expected_sha256": expected,
             "sha256_match": None if expected is None else (digest == expected),
             "bytes": len(data),
-            "path": str(dest),
+            "path": str(Path("data") / "raw" / name),
         }
     return meta
 
@@ -301,7 +300,7 @@ def describe_raw_files(raw_dir: Path) -> dict[str, dict]:
             raise PrepError(f"missing raw file: {path} (run with --download to fetch it)")
         digest = sha256_file(path)
         meta[name] = {
-            "path": str(path),
+            "path": str(Path("data") / "raw" / name),
             "sha256": digest,
             "expected_sha256": expected,
             "sha256_match": None if expected is None else (digest == expected),
@@ -424,15 +423,15 @@ def label_coverage(ts_ms: np.ndarray, windows: list[dict], boundaries=SPLIT_BOUN
     for name, start_src, end_src in boundaries:
         start_ms = encode_source_timestamp_to_ms(start_src)
         end_ms = encode_source_timestamp_to_ms(end_src)
-        points = 0
+        split_mask = (ts >= start_ms) & (ts < end_ms)
+        covered = np.zeros(ts.size, dtype=bool)
         overlapping = 0
         for window in windows:
-            lo = max(window["start_ms"], start_ms)
-            hi = min(window["end_ms"], end_ms)
-            if lo <= hi:  # inclusive interval
+            if window["start_ms"] < end_ms and window["end_ms"] >= start_ms:
                 overlapping += 1
-                points += int(((ts >= lo) & (ts <= hi)).sum())
-        coverage[name] = {"label_points": points, "label_windows_overlapping": overlapping}
+                covered |= (ts >= window["start_ms"]) & (ts <= window["end_ms"])
+        coverage[name] = {"label_points": int((split_mask & covered).sum()),
+                          "label_windows_overlapping": overlapping}
     return coverage
 
 
@@ -485,7 +484,7 @@ def write_processed_series(path: Path, source: pd.Series, ts_ms: np.ndarray, val
     )
     buffer: list[str] = [",".join(frame.columns)]
     for ts, src, val in zip(frame["timestamp_ms"], frame["source_timestamp"], frame["value"]):
-        buffer.append(f"{int(ts)},{src},{val:g}")
+        buffer.append(f"{int(ts)},{src},{val:.17g}")
     atomic_write_text(path, "\n".join(buffer) + "\n")
 
 
@@ -596,7 +595,13 @@ def prepare(paths: dict[str, Path], *, download: bool, run_git_ls_remote: bool =
     file_meta: dict[str, dict] = {}
 
     commit = NAB_REFERENCE_COMMIT
-    commit_source = f"pinned reference commit {NAB_REFERENCE_COMMIT}"
+    commit_source = f"pinned acquisition commit {NAB_REFERENCE_COMMIT}"
+    previous_manifest = {}
+    if not download and paths["manifest"].is_file():
+        previous_manifest = json.loads(paths["manifest"].read_text())
+        previous_nab = previous_manifest.get("nab", {})
+        commit = previous_nab.get("commit", commit)
+        commit_source = previous_nab.get("commit_source", commit_source)
 
     if download:
         if run_git_ls_remote:
@@ -616,7 +621,11 @@ def prepare(paths: dict[str, Path], *, download: bool, run_git_ls_remote: bool =
             file_meta[name]["bytes"] = info["bytes"]
             file_meta[name]["sha256_match"] = info["sha256_match"]
         else:
-            file_meta[name] = info
+            previous = previous_manifest.get("files", {}).get(name, {})
+            if previous.get("sha256") == info["sha256"]:
+                file_meta[name] = {**previous, **info}
+            else:
+                file_meta[name] = info
 
     check_expected_hashes(file_meta)
 
@@ -673,7 +682,7 @@ def prepare(paths: dict[str, Path], *, download: bool, run_git_ls_remote: bool =
         or NAB_RAW_BASE.format(commit=commit, path="LICENSE.txt"),
         "copyright": "Copyright 2014-2024 Numenta Inc.",
         "sha256": file_meta["LICENSE.txt"]["sha256"],
-        "retrieved_utc": file_meta["LICENSE.txt"].get("retrieved_utc", utc_now_iso()),
+        "retrieved_utc": file_meta["LICENSE.txt"].get("retrieved_utc"),
         "data_readme_url": file_meta["data_README.md"].get("url")
         or NAB_RAW_BASE.format(commit=commit, path="data/README.md"),
         "license_text_head": license_text.strip().splitlines()[0] if license_text.strip() else "",
@@ -723,7 +732,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "--skip-ls-remote",
         action="store_true",
-        help="with --download, use the pinned reference commit instead of calling git ls-remote",
+        help="with --download, use the pinned acquisition commit instead of calling git ls-remote",
     )
     parser.add_argument(
         "--repo-root",

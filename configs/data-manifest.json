@@ -1,8 +1,8 @@
 {
   "dataset": "NAB realKnownCause/nyc_taxi.csv",
   "description": "NYC taxi passenger counts, 30-minute buckets; labels are NAB combined anomaly windows.",
-  "generated_utc": "2026-10-13T09:04:33Z",
-  "download_performed": true,
+  "generated_utc": "2026-10-13T09:17:38Z",
+  "download_performed": false,
   "nab": {
     "repository": "https://github.com/numenta/NAB.git",
     "commit": "ea702d75cc2258d9d7dd35ca8e5e2539d71f3140",
@@ -34,7 +34,7 @@
       "expected_sha256": "d8fa6f7f0734bf5c8be12c52a94e20a82664c397d9dec4449156bd453d32856d",
       "sha256_match": true,
       "bytes": 265771,
-      "path": "/Volumes/SSD/projects/dw-periodic-ad/.worktrees/data-prep/data/raw/nyc_taxi.csv"
+      "path": "data/raw/nyc_taxi.csv"
     },
     "combined_windows.json": {
       "url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/labels/combined_windows.json",
@@ -43,7 +43,7 @@
       "expected_sha256": "1e1fbc4601321aad8d0f8b3784c8134299379f68f6c1f7777565f8ffd57ab6b1",
       "sha256_match": true,
       "bytes": 15359,
-      "path": "/Volumes/SSD/projects/dw-periodic-ad/.worktrees/data-prep/data/raw/combined_windows.json"
+      "path": "data/raw/combined_windows.json"
     },
     "data_README.md": {
       "url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/README.md",
@@ -52,7 +52,7 @@
       "expected_sha256": null,
       "sha256_match": null,
       "bytes": 2931,
-      "path": "/Volumes/SSD/projects/dw-periodic-ad/.worktrees/data-prep/data/raw/data_README.md"
+      "path": "data/raw/data_README.md"
     },
     "LICENSE.txt": {
       "url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/LICENSE.txt",
@@ -61,7 +61,7 @@
       "expected_sha256": null,
       "sha256_match": null,
       "bytes": 1056,
-      "path": "/Volumes/SSD/projects/dw-periodic-ad/.worktrees/data-prep/data/raw/LICENSE.txt"
+      "path": "data/raw/LICENSE.txt"
     }
   },
   "series": {

@@ -11,7 +11,7 @@
 | 数据集 | NAB `data/realKnownCause/nyc_taxi.csv`（NYC 出租车乘客数，30 分钟桶） |
 | 标签 | NAB `labels/combined_windows.json`，键 `realKnownCause/nyc_taxi.csv` |
 | 仓库 | https://github.com/numenta/NAB |
-| 固定 commit | `ea702d75cc2258d9d7dd35ca8e5e2539d71f3140`（下载时用 `git ls-remote` 解析 master 得到，与课程资料参考 commit 一致） |
+| 固定 commit | `ea702d75cc2258d9d7dd35ca8e5e2539d71f3140`（2026-10-13 首次下载时用 `git ls-remote` 解析 master 得到） |
 | 获取方式 | `python scripts/prepare_data.py --download`（固定 commit 的 raw URL） |
 | 许可 | Numenta Anomaly Benchmark (NAB) license，MIT-style；`Copyright 2014-2024 Numenta Inc.` |
 | 许可出处 | https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/LICENSE.txt |
@@ -40,7 +40,7 @@
 - 采样间隔：`1800000` ms（30 分钟）。
 - 编码只使用 `utc=True` 的解释，**不读取本机时区**，也不做夏令时换算。
 
-**重要区分：** 这只是技术时间坐标，**不表示原始业务时间真实属于 UTC**。NYC 出租车数据的真实民用时间来自 America/New_York，本项目不转换、不声明其时区。评价与告警都必须使用与数据完全一致的编码；标签窗口用相同编码转换，保证点与窗口可比。
+**重要区分：** 这只是技术时间坐标，**不表示原始业务时间真实属于 UTC**。本项目不推断源时间的真实业务时区，也不进行 America/New_York 夏令时换算。评价与告警都必须使用与数据完全一致的编码；标签窗口用相同编码转换，保证点与窗口可比。
 
 ## 3. 主序列核验
 
@@ -73,7 +73,7 @@
 
 ## 5. 标签窗口与覆盖
 
-标签键 `realKnownCause/nyc_taxi.csv` 共 **5** 个窗口。以下源窗口直接来自 `combined_windows.json`，epoch 毫秒为同一 UTC 坐标编码；窗口按 NAB 约定视为**闭区间**（`start <= t <= end`），本文件的覆盖统计也按闭区间计算。
+标签键 `realKnownCause/nyc_taxi.csv` 共 **5** 个窗口。以下源窗口直接来自 `combined_windows.json`，epoch 毫秒为同一 UTC 坐标编码；本项目将标签窗口视为**闭区间**（`start <= t <= end`），本文件的覆盖统计也按闭区间计算。
 
 | # | 源窗口起始 | 源窗口结束 | 起始 ms | 结束 ms |
 | --- | --- | --- | --- | --- |
@@ -87,7 +87,7 @@
 
 划分内标签覆盖（闭区间计数）：
 
-| 划分 | 窗口外点数（≈标签点数） | 覆盖窗口数 |
+| 划分 | 窗口内点数 | 覆盖窗口数 |
 | --- | --- | --- |
 | train | 0 | 0 |
 | validation | 0 | 0 |
@@ -116,7 +116,7 @@
 
 ## 8. 产物与复现
 
-被 Git 忽略的产物（由主代理后续复制，不进入提交）：
+被 Git 忽略、由准备脚本生成的产物：
 
 - `data/raw/{nyc_taxi.csv,combined_windows.json,data_README.md,LICENSE.txt}`
 - `data/processed/{nyc_taxi.csv,events.json,splits.json}`
@@ -127,8 +127,8 @@
 复现命令（入口可从任意 cwd 定位仓库根）：
 
 ```bash
-# 首次：解析 master commit、下载四个原始文件、校验并转换
-python scripts/prepare_data.py --download
+# 固定本次获取的 commit，下载四个原始文件、校验并转换
+python scripts/prepare_data.py --download --skip-ls-remote
 
 # 之后：只核验本地原始文件并转换
 python scripts/prepare_data.py
@@ -140,4 +140,4 @@ python -m unittest discover -s tests -v
 ## 9. 待确认项
 
 - 标签窗口的闭/开区间口径若助教另有规定，需同步调整覆盖统计与评价程序。
-- 真实业务时区（America/New_York）不参与本项目的时间坐标；若课程要求按当地时间分析，应作为新的技术约定单独记录。
+- 源数据未标真实业务时区；若课程要求按当地时间分析，应核查来源后单独记录新的技术约定。

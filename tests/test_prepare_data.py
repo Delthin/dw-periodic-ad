@@ -159,6 +159,25 @@ class SplitTests(unittest.TestCase):
         self.assertEqual(coverage["train"]["label_windows_overlapping"], 1)
         self.assertEqual(coverage["validation"]["label_points"], 0)
 
+    def test_label_crossing_split_boundary_is_not_double_counted(self) -> None:
+        ts = make_grid()
+        boundary = 1409529600000
+        windows = [{"start_ms": boundary - 1800000, "end_ms": boundary},
+                   {"start_ms": boundary, "end_ms": boundary}]
+        coverage = prep.label_coverage(ts, windows)
+        self.assertEqual(coverage["train"]["label_points"], 1)
+        self.assertEqual(coverage["validation"]["label_points"], 1)
+
+
+class OutputPrecisionTests(unittest.TestCase):
+    def test_preserves_double_precision(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "processed.csv"
+            value = 12345.123456789012
+            prep.write_processed_series(path, prep.pd.Series(["fixture"]),
+                                        np.array([1404172800000]), np.array([value]))
+            self.assertEqual(float(path.read_text().splitlines()[1].split(",")[2]), value)
+
 
 class LagCorrelationTests(unittest.TestCase):
     def test_perfect_periodic_signal(self) -> None:
@@ -221,6 +240,29 @@ class FailureNoArtefactsTests(unittest.TestCase):
                 prep.prepare(paths, download=False)
             self.assertFalse((paths["processed"] / "nyc_taxi.csv").exists())
             self.assertFalse(paths["manifest"].exists())
+
+
+    def test_local_revalidation_preserves_acquisition_metadata(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            paths = prep.repo_paths(Path(tmp))
+            self._write_raw(paths["raw"], break_series=False)
+            files = {name: {"sha256": prep.sha256_file(paths["raw"] / name),
+                            "url": "https://example.test/" + name,
+                            "retrieved_utc": "2026-10-13T00:00:00Z"}
+                     for name in prep.RAW_FILES}
+            paths["manifest"].parent.mkdir(parents=True)
+            paths["manifest"].write_text(json.dumps({"files": files,
+                "nab": {"commit": "recorded-commit", "commit_source": "first acquisition"}}))
+            relaxed = {name: (remote, None) for name, (remote, _) in prep.RAW_FILES.items()}
+            with (mock.patch.dict(prep.RAW_FILES, relaxed, clear=True),
+                  mock.patch.object(prep, "EXPECTED_LABEL_WINDOWS", 1),
+                  mock.patch.object(prep, "write_overview")):
+                prep.prepare(paths, download=False)
+            manifest = json.loads(paths["manifest"].read_text())
+            self.assertEqual(manifest["nab"]["commit"], "recorded-commit")
+            self.assertEqual(manifest["files"]["nyc_taxi.csv"]["retrieved_utc"], "2026-10-13T00:00:00Z")
+            self.assertEqual(manifest["files"]["nyc_taxi.csv"]["path"], "data/raw/nyc_taxi.csv")
+            self.assertEqual(manifest["license"]["retrieved_utc"], "2026-10-13T00:00:00Z")
 
 
 class RepoRootTests(unittest.TestCase):

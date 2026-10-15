@@ -16,7 +16,9 @@ public final class Statistics {
         for (double v : copy) finite(v);
         Arrays.sort(copy);
         int mid = copy.length / 2;
-        return (copy.length & 1) == 1 ? copy[mid] : finite(copy[mid-1] / 2 + copy[mid] / 2);
+        if ((copy.length & 1) == 1) return copy[mid];
+        double low=copy[mid-1], high=copy[mid];
+        return finite((low<0)==(high<0) ? low+(high-low)/2 : low/2+high/2);
     }
     public static double mad(double[] values, double center) {
         double[] deviations = new double[values.length];
@@ -27,9 +29,18 @@ public final class Statistics {
         return Math.max(finite(MAD_FACTOR * mad(values, center)), epsilon);
     }
     public static double mean(double[] values) {
-        double mean = 0;
-        for (double value : values) mean = finite(mean + value / values.length);
-        return mean;
+        if (values.length == 0) throw new IllegalArgumentException("Empty mean");
+        boolean constant = true;
+        double mean = 0, correction = 0;
+        for (double value : values) {
+            finite(value);
+            constant &= value == values[0];
+            double term = value / values.length - correction;
+            double next = finite(mean + term);
+            correction = (next - mean) - term;
+            mean = next;
+        }
+        return constant ? values[0] : mean;
     }
     /** Population standard deviation, not sample standard deviation. */
     public static double populationStd(double[] values, double mean) {

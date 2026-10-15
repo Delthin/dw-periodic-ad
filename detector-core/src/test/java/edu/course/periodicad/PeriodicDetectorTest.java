@@ -68,6 +68,21 @@ class PeriodicDetectorTest {
         for(int i=5;i<15;i++) d.accept(i,1e6+(double)i);
         assertEquals(1e-9,d.epsilon());
     }
+    @Test void nonzeroAutomaticEpsilonIsDerivedFromInitResidualsAndNeverRecomputed() {
+        var c=new DetectorConfig(1,0,2,4,4,4,3,null,BOUNDED,PERIODIC,null);
+        var d=warm(c);
+        assertEquals(0.0007413,d.epsilon(),1e-15);
+        for(int i=12;i<30;i++) d.accept(i,(double)(i*100));
+        assertEquals(0.0007413,d.epsilon(),1e-15);
+    }
+    @Test void fixedContinuesCausalTrainingUntilBoundary() {
+        var d=warm(config(DIRECT,FIXED,14L));
+        assertEquals(14,d.accept(12,14.0).update());
+        assertEquals(22,d.accept(13,22.0).update());
+        Detection p=d.accept(14,1000.0);
+        assertEquals(1.5,p.residualCenter()); assertEquals(1.4826,p.scale(),1e-12); assertNull(p.update());
+        assertEquals(1.5,d.accept(15,2000.0).residualCenter());
+    }
     @Test void fixedBoundaryInclusiveAndNoStateUpdatesAfterTraining() {
         var d=warm(config(DIRECT,FIXED,12L));
         Detection first=d.accept(12,14.0);
@@ -89,6 +104,14 @@ class PeriodicDetectorTest {
         assertEquals(2,p.residualCenter()); assertEquals(1,p.scale()); assertEquals(4,p.score()); assertFalse(p.flag());
         var mad=new PeriodicDetector(new DetectorConfig(1,0,2,1,2,4,3,0.01,DIRECT,ROLLING_MAD,null));
         mad.accept(0,1.0); mad.accept(1,3.0); assertEquals(1.4826,mad.accept(2,6.0).scale());
+    }
+    @Test void constantRollingZIsExactlyZeroAndMedianPreservesSubnormals() {
+        var c=new DetectorConfig(1,0,2,1,48,4,3,null,DIRECT,ROLLING_Z,null);
+        var d=new PeriodicDetector(c);
+        for(int i=0;i<48;i++) assertNull(d.accept(i,10.0));
+        assertEquals(0,d.accept(48,10.0).score());
+        assertEquals(Double.MIN_VALUE,Statistics.median(new double[]{Double.MIN_VALUE,Double.MIN_VALUE}));
+        assertEquals(-Double.MIN_VALUE,Statistics.median(new double[]{-Double.MIN_VALUE,-Double.MIN_VALUE}));
     }
     @Test void noPeriodKeepsSameWarmupButZeroBaseline() {
         var d=warm(config(BOUNDED,NO_PERIOD,null));

@@ -35,6 +35,26 @@ public final class DetectorRunner {
                     }
                 }
             }
+            case "compare", "benchmark" -> {
+                boolean benchmark=args[0].equals("benchmark");
+                if (args.length!=4 && !(benchmark && args.length==5))
+                    throw new IllegalArgumentException(args[0]+" INPUT.csv CONFIG.properties OUTPUT_DIR"+(benchmark?" [REPEATS=5]":""));
+                if(benchmark) DatabaseExperiments.benchmark(Path.of(args[1]),Path.of(args[2]),Path.of(args[3]),args.length==5?Integer.parseInt(args[4]):5);
+                else DatabaseExperiments.compare(Path.of(args[1]),Path.of(args[2]),Path.of(args[3]));
+            }
+            case "register-detector" -> {
+                if(args.length!=1) throw new IllegalArgumentException("register-detector");
+                try(DetectorDatabase db=new DetectorDatabase()) { db.register(); }
+            }
+            case "import-detector" -> {
+                if(args.length<3 || args.length>4) throw new IllegalArgumentException("import-detector INPUT.csv CONFIG.properties [root.periodic_ad.DEVICE]");
+                Properties p=properties(Path.of(args[2]));
+                String device=args.length==4?DetectorDatabase.validateDevice(args[3]):DetectorDatabase.device(p);
+                DetectorConfig c=DetectorConfig.fromProperties(p);
+                DetectorDatabase.inspect(Path.of(args[1]),c);
+                try(DetectorDatabase db=new DetectorDatabase()) { db.importNew(Path.of(args[1]),device,c); }
+                System.out.println("Imported device="+device+" (set db_device in properties to reuse read-only)");
+            }
             default -> SmokeRunner.main(args);
         }
     }

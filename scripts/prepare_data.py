@@ -586,7 +586,6 @@ def build_manifest(
             "summary": "results/data-check/summary.json",
             "overview": "results/data-check/overview.png",
         },
-        "algorithm_implemented": False,
     }
 
 
@@ -671,7 +670,6 @@ def prepare(paths: dict[str, Path], *, download: bool, run_git_ls_remote: bool =
         "split_counts": split_info["counts"],
         "correlations": correlations,
         "label_windows": windows,
-        "algorithm_implemented": False,
     }
 
     license_text = (raw_dir / "LICENSE.txt").read_text(encoding="utf-8", errors="replace")

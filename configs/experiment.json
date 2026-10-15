@@ -1,0 +1,24 @@
+{
+  "seed": 20261015,
+  "primary": "nyc_taxi",
+  "period": 336,
+  "sensitivity_period": 48,
+  "k_candidates": [3, 4, 6],
+  "tau_candidates": [3, 4, 5, 6],
+  "clip_candidates": [2, 3, 5],
+  "background_events_per_day_budget": 0.5,
+  "event_merge_gap_ms": 3600000,
+  "injection": {
+    "fractions": [0.1, 0.25, 0.4, 0.55, 0.7, 0.85],
+    "duration_cycles": [0.020833333333333332, 0.125, 0.5, 1, 2, 3],
+    "day_points": 48,
+    "amplitude_train_median_fraction": 0.35,
+    "signs": [1, -1, 1, -1, 1, -1]
+  },
+  "selection": "among candidates within the unchanged background budget, maximize injected validation event F1; ties: lower background event rate, lower k, lower clip, higher tau; if none meets budget choose lowest background rate then highest injection F1",
+  "supplement_selection": "NAB realAdExchange, fixed daily period; ASCII first 3 with regular finite sampling, first-40%-training >=8 cycles and lag correlation >=0.5; all candidates screened without test labels",
+  "supplement_splits": [0.4, 0.6],
+  "event_boundary": "merge alerts over the full scored prefix before restricting by event start; label windows inclusive; one TP per window, extra events FP; outside exposure uses sample grid cells",
+  "fixed_boundary": "freeze all state at the training/validation boundary",
+  "performance": {"warmup_rounds": 2, "measured_repeats": 5, "synthetic_sizes": [100000, 1000000], "alternating_order": true}
+}

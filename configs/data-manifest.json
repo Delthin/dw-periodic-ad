@@ -171,6 +171,5 @@
     "splits": "data/processed/splits.json",
     "summary": "results/data-check/summary.json",
     "overview": "results/data-check/overview.png"
-  },
-  "algorithm_implemented": false
+  }
 }

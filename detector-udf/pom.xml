@@ -1,5 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"><modelVersion>4.0.0</modelVersion><parent><groupId>edu.course.periodicad</groupId><artifactId>periodic-ad</artifactId><version>0.1.0-SNAPSHOT</version></parent><artifactId>detector-udf</artifactId>
   <dependencies>
+    <dependency><groupId>org.junit.jupiter</groupId><artifactId>junit-jupiter</artifactId><scope>test</scope></dependency>
     <dependency><groupId>edu.course.periodicad</groupId><artifactId>detector-core</artifactId><version>${project.version}</version></dependency>
     <dependency><groupId>org.apache.iotdb</groupId><artifactId>udf-api</artifactId><version>${iotdb.version}</version><scope>provided</scope></dependency>
   </dependencies>

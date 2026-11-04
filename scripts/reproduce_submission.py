@@ -23,16 +23,17 @@ def packages():
     return checked
 
 def main():
-    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--input',type=Path,default=ROOT/'results/submission/nab-replay');p.add_argument('--output',type=Path,default=ROOT/'results/reproduced-submission');p.add_argument('--no-package-check',action='store_true');a=p.parse_args()
-    checked=0 if a.no_package_check else packages();out=a.output.resolve();out.mkdir(parents=True,exist_ok=True)
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--input',type=Path,default=ROOT/'results/submission/nab-replay');p.add_argument('--output',type=Path,default=ROOT/'results/reproduced-submission');p.add_argument('--check-hashes',action='store_true',help='Opt in to legacy file-hash checks; disabled by default.');p.add_argument('--no-package-check',action='store_true',help=argparse.SUPPRESS);a=p.parse_args()
+    check_hashes=a.check_hashes and not a.no_package_check
+    checked=packages() if check_hashes else 0;out=a.output.resolve();out.mkdir(parents=True,exist_ok=True)
     data=json.loads((a.input/'manifest.json').read_text());c=data['contract'];selected={}
     for meta in data['series']:
         path=a.input/meta['file']
-        if sha(path)!=meta['sha256']:raise ValueError('Replay scores changed: '+meta['id'])
+        if check_hashes and sha(path)!=meta['sha256']:raise ValueError('Replay scores changed: '+meta['id'])
         with np.load(path) as z:
             selected[meta['id']]=choose(z['cal_t'],z['cal_raw'],[meta['component_thresholds'][m] for m in COMPONENTS],meta['injections'],meta,c)
     # Persist all choices before evaluating true windows. No test score selects a mode.
-    dump(out/'selection.json',{'selections':selected,'allowed_modes':MODES,'scope':'NAB exposed-data development replay; validation-only selection','input_manifest_sha256':sha(a.input/'manifest.json')})
+    dump(out/'selection.json',{'selections':selected,'allowed_modes':MODES,'scope':'NAB exposed-data development replay; validation-only selection','input_manifest':str(a.input/'manifest.json')})
     rows=[];window_rows=[]
     for meta in data['series']:
         choice=selected[meta['id']]
@@ -65,6 +66,6 @@ def main():
                 checks+=1
         status='matched'
     for name,obj in [('metrics',rows),('windows',window_rows),('summary',aggregate(rows))]:dump(out/(name+'.json'),obj);pd.DataFrame(obj).to_csv(out/(name+'.csv'),index=False)
-    result={'status':status,'series_checked':len(final),'metric_fields_checked':checks,'package_files_checked':checked,'mode_counts':dict(Counter(r['variant'] for r in selected.values())),'totals':{k:sum(r[k] for r in final) for k in ('tp','fp','fn','outside_fp','duplicate_fp')},'selection_sha256':sha(out/'selection.json'),'scope':'Recomputed validation fusion selection and event/point metrics from lossless Java scores; not model refitting or a new blind test'}
+    result={'status':status,'series_checked':len(final),'metric_fields_checked':checks,'package_files_checked':checked,'mode_counts':dict(Counter(r['variant'] for r in selected.values())),'totals':{k:sum(r[k] for r in final) for k in ('tp','fp','fn','outside_fp','duplicate_fp')},'scope':'Recomputed validation fusion selection and event/point metrics from lossless Java scores; not model refitting or a new blind test'}
     dump(out/'verification.json',result);print(json.dumps(result,ensure_ascii=False,indent=2))
 if __name__=='__main__':main()

@@ -6,7 +6,7 @@ ROOT=Path(__file__).resolve().parents[1]
 TITLE='9-李思懿-周期时间序列异常检测'
 SCRIPTS='benchmark_adaptive_database.py benchmark_expanded.py benchmark_iteration2.py build_final_submission.py build_nab_submission.py revise_original_for_submission.py check_default_compatibility.sh deploy_detector.sh env.sh evaluation.py export_submission_replay.py iotdb.sh literature_baselines.py nab_fusion.py package_nab_submission.py predictive_baseline.py prepare_expanded.py production_scoring.py reproduce_submission.py run_submission_experiment.py setup_runtime.py'.split()
 CONFIGS='benchmark-expanded.json expanded-manifest.json iteration2.json iotdb-local.properties detector.properties temporal-evidence.properties robust-evidence.properties adaptive-evidence.properties robust-ar.properties'.split()
-DOCS=['最终版-代码使用说明.md','最终版-报告正文.md','最终版-测试用例与实验描述.md','最终版-论文与实现来源.md']
+DOCS=['最终版-代码使用说明.md','最终版-报告正文.md','最终版-测试用例与实验描述.md','最终版-论文与实现来源.md','最终版-数据与逐窗口说明.md']
 FAMILIES={'realAWSCloudwatch','realKnownCause','realTweets','realTraffic','realAdExchange'}
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
 def main():

@@ -11,6 +11,7 @@ import java.util.Locale;
 public final class DetectorCsv implements AutoCloseable {
     public static final String INPUT_HEADER = "timestamp_ms,source_timestamp,value";
     public static final String OUTPUT_HEADER = "timestamp_ms,value,baseline,residual,residual_center,scale,score,flag,update,phase";
+    public static final String DIAGNOSTIC_HEADER = OUTPUT_HEADER + ",raw_score,raw_flag,evidence_score,score_mode,score_threshold";
     public record Point(long timestamp, Double value) {}
     private final BufferedReader reader;
     private long line = 1;
@@ -39,11 +40,17 @@ public final class DetectorCsv implements AutoCloseable {
         } catch (NumberFormatException e) { throw new IllegalArgumentException("Invalid number at CSV line " + line, e); }
     }
     @Override public void close() throws IOException { reader.close(); }
+    private static String row(Detection d) {
+        return d.timestampMs()+","+d.value()+","+d.baseline()+","+d.residual()+","+d.residualCenter()+","+d.scale()+","+d.score()+","+d.flag()+","+(d.update()==null ? "" : d.update())+","+d.phase();
+    }
     public static void write(BufferedWriter writer, Detection d) throws IOException {
-        writer.write(d.timestampMs()+","+d.value()+","+d.baseline()+","+d.residual()+","+d.residualCenter()+","+d.scale()+","+d.score()+","+d.flag()+","+(d.update()==null ? "" : d.update())+","+d.phase());
-        writer.newLine();
+        writer.write(row(d)); writer.newLine();
     }
     public static void score(Path input, Path output, DetectorConfig config) throws IOException {
+        score(input, output, config, false);
+    }
+    /** Diagnostics are explicit; the original ten-column score CSV is unchanged. */
+    public static void score(Path input, Path output, DetectorConfig config, boolean diagnostics) throws IOException {
         input = input.toAbsolutePath().normalize(); output = output.toAbsolutePath().normalize();
         if (input.equals(output) || (Files.exists(output) && Files.isSameFile(input,output)))
             throw new IllegalArgumentException("Input and output must differ");
@@ -52,11 +59,17 @@ public final class DetectorCsv implements AutoCloseable {
         try {
             PeriodicDetector detector = new PeriodicDetector(config);
             try (DetectorCsv csv = new DetectorCsv(input); BufferedWriter writer = Files.newBufferedWriter(temp, StandardCharsets.UTF_8)) {
-                writer.write(OUTPUT_HEADER); writer.newLine();
+                writer.write(diagnostics ? DIAGNOSTIC_HEADER : OUTPUT_HEADER); writer.newLine();
                 Point p;
                 while ((p=csv.next()) != null) {
                     Detection d = detector.accept(p.timestamp(),p.value());
-                    if (d != null) write(writer,d);
+                    if (d != null) {
+                        if (!diagnostics) write(writer,d);
+                        else {
+                            writer.write(row(d)+","+d.rawScore()+","+d.rawFlag()+","+(d.evidenceScore()==null ? "" : d.evidenceScore())+","+config.scoreMode().name().toLowerCase(Locale.ROOT)+","+config.scoreThreshold());
+                            writer.newLine();
+                        }
+                    }
                 }
             }
             Files.move(temp, output, StandardCopyOption.REPLACE_EXISTING);

@@ -86,14 +86,29 @@ final class DetectorDatabase implements AutoCloseable {
     }
     static String range(Input input) { return " WHERE time >= "+input.first()+" AND time <= "+input.last(); }
     static String rawQuery(String device,Input input) { return "SELECT value FROM "+validateDevice(device)+range(input); }
+    private static String arAttributes(DetectorConfig c) {
+        String context=",'ar_level_context'='"+c.arLevelContext()+"','ar_level_scale_floor'='"+c.arLevelScaleFloor()+"'";
+        RobustArModel m=c.arModel();
+        if (m==null) return context;
+        return context+",'ar_lags'='"+m.lagsAttribute()+"','ar_coefficients'='"+m.coefficientsAttribute()
+                +"','ar_intercept'='"+m.intercept()+"','ar_center'='"+m.center()+"','ar_scale'='"+m.scale()
+                +"','ar_lag_clip'='"+m.lagClip()+"'";
+    }
     static String attributes(DetectorConfig c,String mode) {
-        return "'step_ms'='"+c.stepMs()+"','origin_ms'='"+c.originMs()+"','period'='"+c.period()+"','k'='"+c.k()+"','window'='"+c.window()+"','tau'='"+c.tau()+"','clip'='"+c.clip()+"','epsilon'='"+(c.epsilon()==null ? "auto" : c.epsilon())+"','strategy'='"+c.strategy().name().toLowerCase(Locale.ROOT)+"','method'='"+c.method().name().toLowerCase(Locale.ROOT)+"'"+(c.freezeAtMs()==null ? "" : ",'freeze_at_ms'='"+c.freezeAtMs()+"'")+",'mode'='"+mode+"'";
+        return "'score_mode'='"+c.scoreMode().name().toLowerCase(Locale.ROOT)+"','evidence_span'='"+c.evidenceSpan()+"','evidence_tau'='"+c.evidenceTau()+"','evidence_clip'='"+(c.evidenceClip()==null ? "none" : c.evidenceClip())+"',"+ "'evidence_scale_floor'='"+c.evidenceScaleFloor()+"','evidence_normalizer'='"+c.evidenceNormalizer()+"','step_ms'='"+c.stepMs()+"','origin_ms'='"+c.originMs()+"','period'='"+c.period()+"','k'='"+c.k()+"','window'='"+c.window()+"','tau'='"+c.tau()+"','clip'='"+c.clip()+"','epsilon'='"+(c.epsilon()==null ? "auto" : c.epsilon())+"','strategy'='"+c.strategy().name().toLowerCase(Locale.ROOT)+"','method'='"+c.method().name().toLowerCase(Locale.ROOT)+"'"+(c.freezeAtMs()==null ? "" : ",'freeze_at_ms'='"+c.freezeAtMs()+"'")+arAttributes(c)+",'mode'='"+mode+"'";
     }
     static String udfScoreQuery(String device,Input input,DetectorConfig config) {
         return "SELECT periodic_ad(value,"+attributes(config,"score")+") FROM "+validateDevice(device)+range(input);
     }
     static String udfQuery(String device,Input input,DetectorConfig config) {
         return "SELECT periodic_ad(value,"+attributes(config,"score")+"), periodic_ad(value,"+attributes(config,"flag")+") FROM "+validateDevice(device)+range(input);
+    }
+    static String udfQuery(String device, Input input, DetectorConfig config, AlarmGateConfig gate) {
+        StringJoiner columns = new StringJoiner(", ");
+        for (String mode : List.of("score", "flag", "event", "active"))
+            columns.add("periodic_ad(value,"+attributes(config, mode)+",'exit_ratio'='"+gate.exitRatio()
+                    +"','recovery_ms'='"+gate.recoveryMs()+"')");
+        return "SELECT "+columns+" FROM "+validateDevice(device)+range(input);
     }
     /** Verifies specified existing series, including every timestamp/value, BEFORE timing or comparison. */
     void verifyRaw(Path input,String device,Input meta) throws Exception {

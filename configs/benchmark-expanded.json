@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "seed": 20261103,
+  "nab_commit": "ea702d75cc2258d9d7dd35ca8e5e2539d71f3140",
+  "candidate_families": ["realAWSCloudwatch", "realAdExchange", "realKnownCause", "realTraffic", "realTweets"],
+  "admission": "all finite, strictly increasing, completely regular source series; sampling step divides one day; first 40% contains at least 4 daily cycles plus 1 point; no label/correlation/performance filtering",
+  "period_selection": "daily or weekly known candidate, requiring 4 cycles plus 1 training point; maximize training-only lag Pearson (undefined=-1), ties prefer shorter; no test values",
+  "split_train_end": 0.4,
+  "split_validation_end": 0.6,
+  "history_k": 3,
+  "baseline_clip": 2.0,
+  "raw_update_tau": 4.0,
+  "evidence_span": 12,
+  "evidence_clip": 4.0,
+  "clip_selection": "NYC original validation only, fixed span12/tau3, cap candidates none/4/6/8: cap4 retained 4/6 injected hits, improved injected F1 .6154 to .6667 and background events 4 to 1. NYC is exploratory because historically exposed.",
+  "threshold_quantiles": [0.90, 0.95, 0.975, 0.99, 0.995, 0.999, 1.0],
+  "validation_point_alarm_budget": 0.01,
+  "threshold_selection": "per method: among validation background point-alarm fraction <=.01, maximize injected-validation event F1; tie minimize background point alarms, then prefer higher threshold. Fallback minimum background alarms, then max injected F1. All selections saved before any test label parsing.",
+  "injection": {"fractions": [0.08, 0.23, 0.38, 0.53, 0.68, 0.83], "duration_daily_fractions": [0.01, 0.125, 0.5, 0.01, 0.125, 0.5], "signs": [1, -1, 1, -1, 1, -1], "amplitude_training_seasonal_mad_multiple": 6.0, "amplitude_training_iqr_floor_fraction": 0.1},
+  "baselines": {
+    "rolling_mad": {"window": "selected period", "implementation": "existing causal Java rolling_mad"},
+    "seasonal_naive": {"prediction": "x[t-period]", "score": "absolute residual", "implementation": "independent NumPy"},
+    "isolation_forest": {"implementation": "scikit-learn 1.7.2 IsolationForest", "n_estimators": 200, "max_samples": 256, "features": "trailing min(24, daily period) raw observations; train-prefix standardization only", "train_limit": 5000},
+    "local_outlier_factor": {"implementation": "scikit-learn 1.7.2 LocalOutlierFactor novelty=True", "n_neighbors": 20, "features": "same causal trailing vector and scaler as Isolation Forest", "train_limit": 5000}
+  },
+  "methods": ["rolling_mad", "seasonal_naive", "isolation_forest", "local_outlier_factor", "periodic_point", "periodic_ewma", "periodic_robust_ewma"],
+  "evaluation": {"event_merge_gap_ms": 3600000, "rule": "merge complete scored history then assign by first alert; one TP per closed NAB window; duplicates and outside events both FP; no point adjustment; not official NAB score", "report": ["event precision/recall/F1", "outside and duplicate FP", "outside point FPR", "window-proxy average precision", "window-relative first-alert position", "micro and macro metrics", "periodicity strata", "previously exposed versus newly evaluated series"]},
+  "previously_evaluated": ["realKnownCause/nyc_taxi.csv", "realKnownCause/ambient_temperature_system_failure.csv", "realKnownCause/ec2_request_latency_system_failure.csv", "realAWSCloudwatch/ec2_cpu_utilization_5f5533.csv", "realAWSCloudwatch/ec2_cpu_utilization_825cc2.csv", "realAWSCloudwatch/ec2_cpu_utilization_24ae8d.csv", "realAWSCloudwatch/ec2_cpu_utilization_53ea38.csv", "realAWSCloudwatch/ec2_cpu_utilization_77c1ca.csv", "realAWSCloudwatch/ec2_cpu_utilization_ac20cd.csv", "realAWSCloudwatch/ec2_cpu_utilization_c6585a.csv", "realAWSCloudwatch/ec2_cpu_utilization_fe7f93.csv"],
+  "scope": "multi-series/multi-domain NAB benchmark, not a claim of validation on multiple independent benchmark collections; include every admitted result, including failures"
+}

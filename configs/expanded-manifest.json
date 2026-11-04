@@ -1,0 +1,1062 @@
+{
+  "contract_sha256": "77bed5a1828a45be50c8c972380519d96456856add6294bb7e7871dd08da7d0b",
+  "nab_commit": "ea702d75cc2258d9d7dd35ca8e5e2539d71f3140",
+  "candidates": [
+    {
+      "source": "realAWSCloudwatch/ec2_cpu_utilization_24ae8d.csv",
+      "family": "realAWSCloudwatch",
+      "raw_sha256": "ab446fbd8b9f37507eb2fdb06315826d8daeef02e241133ce06e0ee571ba53d9",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realAWSCloudwatch/ec2_cpu_utilization_24ae8d.csv",
+      "rows": 4032,
+      "step_ms": 300000,
+      "regular": true,
+      "daily_period": 288,
+      "admitted": true,
+      "reasons": [],
+      "previously_evaluated": true,
+      "id": "realAWSCloudwatch__ec2_cpu_utilization_24ae8d",
+      "period": 288,
+      "train_lag_correlation": 0.371756259113295,
+      "period_candidates": [
+        {
+          "period": 288,
+          "train_lag_correlation": 0.371756259113295
+        }
+      ],
+      "origin_ms": 1392388200000,
+      "train_end_index": 1612,
+      "validation_end_index": 2419,
+      "validation_start_ms": 1392871800000,
+      "test_start_ms": 1393113900000,
+      "end_ms_exclusive": 1393597800000,
+      "input": "data/processed/expanded/realAWSCloudwatch__ec2_cpu_utilization_24ae8d.csv",
+      "processed_sha256": "54889150dbef70eac16c9a44b3533ae85e5d7774c4258ce20f066915f919ec22",
+      "strong_periodicity": false
+    },
+    {
+      "source": "realAWSCloudwatch/ec2_cpu_utilization_53ea38.csv",
+      "family": "realAWSCloudwatch",
+      "raw_sha256": "8942e498de7b40f1b4a6d802755592c09b8fb73ce8f658763a09cb9ea1ea94ac",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realAWSCloudwatch/ec2_cpu_utilization_53ea38.csv",
+      "rows": 4032,
+      "step_ms": 300000,
+      "regular": true,
+      "daily_period": 288,
+      "admitted": true,
+      "reasons": [],
+      "previously_evaluated": true,
+      "id": "realAWSCloudwatch__ec2_cpu_utilization_53ea38",
+      "period": 288,
+      "train_lag_correlation": 0.585689561713622,
+      "period_candidates": [
+        {
+          "period": 288,
+          "train_lag_correlation": 0.585689561713622
+        }
+      ],
+      "origin_ms": 1392388200000,
+      "train_end_index": 1612,
+      "validation_end_index": 2419,
+      "validation_start_ms": 1392871800000,
+      "test_start_ms": 1393113900000,
+      "end_ms_exclusive": 1393597800000,
+      "input": "data/processed/expanded/realAWSCloudwatch__ec2_cpu_utilization_53ea38.csv",
+      "processed_sha256": "7de1ecd452f76b8cc2898ed2577ab5ffe32883d9be7b57961604162984e93e08",
+      "strong_periodicity": true
+    },
+    {
+      "source": "realAWSCloudwatch/ec2_cpu_utilization_5f5533.csv",
+      "family": "realAWSCloudwatch",
+      "raw_sha256": "01613e6f632d067f11a5dfd40a188b0789752b388d9bc77a398bd06333878a76",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realAWSCloudwatch/ec2_cpu_utilization_5f5533.csv",
+      "rows": 4032,
+      "step_ms": 300000,
+      "regular": true,
+      "daily_period": 288,
+      "admitted": true,
+      "reasons": [],
+      "previously_evaluated": true,
+      "id": "realAWSCloudwatch__ec2_cpu_utilization_5f5533",
+      "period": 288,
+      "train_lag_correlation": -0.06008218864915998,
+      "period_candidates": [
+        {
+          "period": 288,
+          "train_lag_correlation": -0.06008218864915998
+        }
+      ],
+      "origin_ms": 1392388020000,
+      "train_end_index": 1612,
+      "validation_end_index": 2419,
+      "validation_start_ms": 1392871620000,
+      "test_start_ms": 1393113720000,
+      "end_ms_exclusive": 1393597620000,
+      "input": "data/processed/expanded/realAWSCloudwatch__ec2_cpu_utilization_5f5533.csv",
+      "processed_sha256": "2a523231d5d1f89f2edc3b67ed832f988dee8f39e6d75c0f6759e8421463053c",
+      "strong_periodicity": false
+    },
+    {
+      "source": "realAWSCloudwatch/ec2_cpu_utilization_77c1ca.csv",
+      "family": "realAWSCloudwatch",
+      "raw_sha256": "90ceabd570b449241ee24ff8a116a793979b7671ce4490707311bfea0e0aae1f",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realAWSCloudwatch/ec2_cpu_utilization_77c1ca.csv",
+      "rows": 4032,
+      "step_ms": 300000,
+      "regular": true,
+      "daily_period": 288,
+      "admitted": true,
+      "reasons": [],
+      "previously_evaluated": true,
+      "id": "realAWSCloudwatch__ec2_cpu_utilization_77c1ca",
+      "period": 288,
+      "train_lag_correlation": 0.06255051962700277,
+      "period_candidates": [
+        {
+          "period": 288,
+          "train_lag_correlation": 0.06255051962700277
+        }
+      ],
+      "origin_ms": 1396448700000,
+      "train_end_index": 1612,
+      "validation_end_index": 2419,
+      "validation_start_ms": 1396932300000,
+      "test_start_ms": 1397174400000,
+      "end_ms_exclusive": 1397658300000,
+      "input": "data/processed/expanded/realAWSCloudwatch__ec2_cpu_utilization_77c1ca.csv",
+      "processed_sha256": "7e14ab6ff778b197218734e5aadfccf5200ce55f5647745c039a57ff39fae437",
+      "strong_periodicity": false
+    },
+    {
+      "source": "realAWSCloudwatch/ec2_cpu_utilization_825cc2.csv",
+      "family": "realAWSCloudwatch",
+      "raw_sha256": "d768419037c9db269343822957314f57ee21a7d9a4d41df2add0d1ba45ba84de",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realAWSCloudwatch/ec2_cpu_utilization_825cc2.csv",
+      "rows": 4032,
+      "step_ms": 300000,
+      "regular": false,
+      "daily_period": 288,
+      "admitted": false,
+      "reasons": [
+        "not_completely_regular"
+      ],
+      "previously_evaluated": true
+    },
+    {
+      "source": "realAWSCloudwatch/ec2_cpu_utilization_ac20cd.csv",
+      "family": "realAWSCloudwatch",
+      "raw_sha256": "749a15c2e1a4543c21fee9cbf3338cd8a7ed5f5f8a1308b9b099b06c2c66e66b",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realAWSCloudwatch/ec2_cpu_utilization_ac20cd.csv",
+      "rows": 4032,
+      "step_ms": 300000,
+      "regular": false,
+      "daily_period": 288,
+      "admitted": false,
+      "reasons": [
+        "not_completely_regular"
+      ],
+      "previously_evaluated": true
+    },
+    {
+      "source": "realAWSCloudwatch/ec2_cpu_utilization_c6585a.csv",
+      "family": "realAWSCloudwatch",
+      "raw_sha256": "d936cea74682ed43ac96b778352d7de294c0b0c168f4a7e6817162346cdb28c1",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realAWSCloudwatch/ec2_cpu_utilization_c6585a.csv",
+      "rows": 4032,
+      "step_ms": 300000,
+      "regular": true,
+      "daily_period": 288,
+      "admitted": true,
+      "reasons": [],
+      "previously_evaluated": true,
+      "id": "realAWSCloudwatch__ec2_cpu_utilization_c6585a",
+      "period": 288,
+      "train_lag_correlation": 0.0025881995438205075,
+      "period_candidates": [
+        {
+          "period": 288,
+          "train_lag_correlation": 0.0025881995438205075
+        }
+      ],
+      "origin_ms": 1396448940000,
+      "train_end_index": 1612,
+      "validation_end_index": 2419,
+      "validation_start_ms": 1396932540000,
+      "test_start_ms": 1397174640000,
+      "end_ms_exclusive": 1397658540000,
+      "input": "data/processed/expanded/realAWSCloudwatch__ec2_cpu_utilization_c6585a.csv",
+      "processed_sha256": "443bcd3ce85c5e35e1ccf9679c38eb52f6c84a4a7ecf491b0240e41523f3867e",
+      "strong_periodicity": false
+    },
+    {
+      "source": "realAWSCloudwatch/ec2_cpu_utilization_fe7f93.csv",
+      "family": "realAWSCloudwatch",
+      "raw_sha256": "f3433f8171f4dcea86c0c7af9996d0f166f812fa0f4567f1d5cd85d2d2cd69b4",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realAWSCloudwatch/ec2_cpu_utilization_fe7f93.csv",
+      "rows": 4032,
+      "step_ms": 300000,
+      "regular": true,
+      "daily_period": 288,
+      "admitted": true,
+      "reasons": [],
+      "previously_evaluated": true,
+      "id": "realAWSCloudwatch__ec2_cpu_utilization_fe7f93",
+      "period": 288,
+      "train_lag_correlation": 0.12991526676091017,
+      "period_candidates": [
+        {
+          "period": 288,
+          "train_lag_correlation": 0.12991526676091017
+        }
+      ],
+      "origin_ms": 1392388020000,
+      "train_end_index": 1612,
+      "validation_end_index": 2419,
+      "validation_start_ms": 1392871620000,
+      "test_start_ms": 1393113720000,
+      "end_ms_exclusive": 1393597620000,
+      "input": "data/processed/expanded/realAWSCloudwatch__ec2_cpu_utilization_fe7f93.csv",
+      "processed_sha256": "59aeae0a981d9a5129566c9b8fad26c4a0a8aa38ff80a78f26885038535ed9ec",
+      "strong_periodicity": false
+    },
+    {
+      "source": "realAWSCloudwatch/ec2_disk_write_bytes_1ef3de.csv",
+      "family": "realAWSCloudwatch",
+      "raw_sha256": "ce3d6c6a652ed7c31a6dd3727a36e128fcac6fb2381c63267ad0fbc02eccd9df",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realAWSCloudwatch/ec2_disk_write_bytes_1ef3de.csv",
+      "rows": 4730,
+      "step_ms": 300000,
+      "regular": false,
+      "daily_period": 288,
+      "admitted": false,
+      "reasons": [
+        "not_completely_regular"
+      ],
+      "previously_evaluated": false
+    },
+    {
+      "source": "realAWSCloudwatch/ec2_disk_write_bytes_c0d644.csv",
+      "family": "realAWSCloudwatch",
+      "raw_sha256": "a0e734a66098bb81833835f0839dadafbc8ae829c51494670ee8849e46eb5b63",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realAWSCloudwatch/ec2_disk_write_bytes_c0d644.csv",
+      "rows": 4032,
+      "step_ms": 300000,
+      "regular": true,
+      "daily_period": 288,
+      "admitted": true,
+      "reasons": [],
+      "previously_evaluated": false,
+      "id": "realAWSCloudwatch__ec2_disk_write_bytes_c0d644",
+      "period": 288,
+      "train_lag_correlation": 0.029822283218815245,
+      "period_candidates": [
+        {
+          "period": 288,
+          "train_lag_correlation": 0.029822283218815245
+        }
+      ],
+      "origin_ms": 1396448700000,
+      "train_end_index": 1612,
+      "validation_end_index": 2419,
+      "validation_start_ms": 1396932300000,
+      "test_start_ms": 1397174400000,
+      "end_ms_exclusive": 1397658300000,
+      "input": "data/processed/expanded/realAWSCloudwatch__ec2_disk_write_bytes_c0d644.csv",
+      "processed_sha256": "1d90086ee337a7b079bfe8cbb6ac23aa26265c4be03f37e3a00481df19edd83d",
+      "strong_periodicity": false
+    },
+    {
+      "source": "realAWSCloudwatch/ec2_network_in_257a54.csv",
+      "family": "realAWSCloudwatch",
+      "raw_sha256": "39104b08f2e0a673b5137eb7681897fcadf0955fedf565740a6a94edc63a81a4",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realAWSCloudwatch/ec2_network_in_257a54.csv",
+      "rows": 4032,
+      "step_ms": 300000,
+      "regular": false,
+      "daily_period": 288,
+      "admitted": false,
+      "reasons": [
+        "not_completely_regular"
+      ],
+      "previously_evaluated": false
+    },
+    {
+      "source": "realAWSCloudwatch/ec2_network_in_5abac7.csv",
+      "family": "realAWSCloudwatch",
+      "raw_sha256": "c27ef93f582af63bf42e80d804764cbe64ae987620f3cfab5477d6ebb3c6157e",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realAWSCloudwatch/ec2_network_in_5abac7.csv",
+      "rows": 4730,
+      "step_ms": 300000,
+      "regular": false,
+      "daily_period": 288,
+      "admitted": false,
+      "reasons": [
+        "not_completely_regular"
+      ],
+      "previously_evaluated": false
+    },
+    {
+      "source": "realAWSCloudwatch/elb_request_count_8c0756.csv",
+      "family": "realAWSCloudwatch",
+      "raw_sha256": "74c26574a01ca9fb89dddb5021e2e13c3a93eb25dc640438a9acb1ceb00f1021",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realAWSCloudwatch/elb_request_count_8c0756.csv",
+      "rows": 4032,
+      "step_ms": 300000,
+      "regular": false,
+      "daily_period": 288,
+      "admitted": false,
+      "reasons": [
+        "not_completely_regular"
+      ],
+      "previously_evaluated": false
+    },
+    {
+      "source": "realAWSCloudwatch/grok_asg_anomaly.csv",
+      "family": "realAWSCloudwatch",
+      "raw_sha256": "86a0abe9d58e376858d2fd4f4a438f1997e24c64a09e5af03accd4e1b372ac47",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realAWSCloudwatch/grok_asg_anomaly.csv",
+      "rows": 4621,
+      "step_ms": 300000,
+      "regular": true,
+      "daily_period": 288,
+      "admitted": true,
+      "reasons": [],
+      "previously_evaluated": false,
+      "id": "realAWSCloudwatch__grok_asg_anomaly",
+      "period": 288,
+      "train_lag_correlation": 0.031074196174429292,
+      "period_candidates": [
+        {
+          "period": 288,
+          "train_lag_correlation": 0.031074196174429292
+        }
+      ],
+      "origin_ms": 1389830400000,
+      "train_end_index": 1848,
+      "validation_end_index": 2772,
+      "validation_start_ms": 1390384800000,
+      "test_start_ms": 1390662000000,
+      "end_ms_exclusive": 1391216700000,
+      "input": "data/processed/expanded/realAWSCloudwatch__grok_asg_anomaly.csv",
+      "processed_sha256": "afd8ad2489f8877dbc630898e809f4edf72004934f4768cd2dced4fd0b628336",
+      "strong_periodicity": false
+    },
+    {
+      "source": "realAWSCloudwatch/iio_us-east-1_i-a2eb1cd9_NetworkIn.csv",
+      "family": "realAWSCloudwatch",
+      "raw_sha256": "f115fbe6542159eed5612445bfa620708a28ab6b41349d1432bb15c3a3b8414d",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realAWSCloudwatch/iio_us-east-1_i-a2eb1cd9_NetworkIn.csv",
+      "rows": 1243,
+      "step_ms": 300000,
+      "regular": true,
+      "daily_period": 288,
+      "admitted": false,
+      "reasons": [
+        "training_shorter_than_four_daily_cycles_plus_one"
+      ],
+      "previously_evaluated": false
+    },
+    {
+      "source": "realAWSCloudwatch/rds_cpu_utilization_cc0c53.csv",
+      "family": "realAWSCloudwatch",
+      "raw_sha256": "d5df979ef85928769a016cd0f935919d8c2a113926e21e1eb3a5001d688760e2",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realAWSCloudwatch/rds_cpu_utilization_cc0c53.csv",
+      "rows": 4032,
+      "step_ms": 300000,
+      "regular": false,
+      "daily_period": 288,
+      "admitted": false,
+      "reasons": [
+        "not_completely_regular"
+      ],
+      "previously_evaluated": false
+    },
+    {
+      "source": "realAWSCloudwatch/rds_cpu_utilization_e47b3b.csv",
+      "family": "realAWSCloudwatch",
+      "raw_sha256": "6b712b922ab3b3404c5a629d64a570c390c99471ee8b9b0ff7665f553fda92c1",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realAWSCloudwatch/rds_cpu_utilization_e47b3b.csv",
+      "rows": 4032,
+      "step_ms": 300000,
+      "regular": true,
+      "daily_period": 288,
+      "admitted": true,
+      "reasons": [],
+      "previously_evaluated": false,
+      "id": "realAWSCloudwatch__rds_cpu_utilization_e47b3b",
+      "period": 288,
+      "train_lag_correlation": 0.17949102493073082,
+      "period_candidates": [
+        {
+          "period": 288,
+          "train_lag_correlation": 0.17949102493073082
+        }
+      ],
+      "origin_ms": 1397088120000,
+      "train_end_index": 1612,
+      "validation_end_index": 2419,
+      "validation_start_ms": 1397571720000,
+      "test_start_ms": 1397813820000,
+      "end_ms_exclusive": 1398297720000,
+      "input": "data/processed/expanded/realAWSCloudwatch__rds_cpu_utilization_e47b3b.csv",
+      "processed_sha256": "de2f0e3e3524c5677d6345dbd721e2c26ec099f444fbb29dcfd80004ae2f3dc6",
+      "strong_periodicity": false
+    },
+    {
+      "source": "realAdExchange/exchange-2_cpc_results.csv",
+      "family": "realAdExchange",
+      "raw_sha256": "d869ab165254f3ee77ee21fd9fab2be1d07c1f80b8133cf01bbaf2d768c2ac64",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realAdExchange/exchange-2_cpc_results.csv",
+      "rows": 1624,
+      "step_ms": 3600000,
+      "regular": false,
+      "daily_period": 24,
+      "admitted": false,
+      "reasons": [
+        "not_completely_regular"
+      ],
+      "previously_evaluated": false
+    },
+    {
+      "source": "realAdExchange/exchange-2_cpm_results.csv",
+      "family": "realAdExchange",
+      "raw_sha256": "1f01b9438566d2fe1ac446faa202a395ac86db9240a1955bc1f118c8eada2a19",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realAdExchange/exchange-2_cpm_results.csv",
+      "rows": 1624,
+      "step_ms": 3600000,
+      "regular": false,
+      "daily_period": 24,
+      "admitted": false,
+      "reasons": [
+        "not_completely_regular"
+      ],
+      "previously_evaluated": false
+    },
+    {
+      "source": "realAdExchange/exchange-3_cpc_results.csv",
+      "family": "realAdExchange",
+      "raw_sha256": "e70b24dba107a2589657cb3feb9ca5605b4f3f7de49ff445f32f5991bc0bdbe5",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realAdExchange/exchange-3_cpc_results.csv",
+      "rows": 1538,
+      "step_ms": 3600000,
+      "regular": false,
+      "daily_period": 24,
+      "admitted": false,
+      "reasons": [
+        "not_completely_regular"
+      ],
+      "previously_evaluated": false
+    },
+    {
+      "source": "realAdExchange/exchange-3_cpm_results.csv",
+      "family": "realAdExchange",
+      "raw_sha256": "74d354a94fb1730e14b469c7c1c6e99c2ad69af53afdb85f65220bd3cf01ce4a",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realAdExchange/exchange-3_cpm_results.csv",
+      "rows": 1538,
+      "step_ms": 3600000,
+      "regular": false,
+      "daily_period": 24,
+      "admitted": false,
+      "reasons": [
+        "not_completely_regular"
+      ],
+      "previously_evaluated": false
+    },
+    {
+      "source": "realAdExchange/exchange-4_cpc_results.csv",
+      "family": "realAdExchange",
+      "raw_sha256": "d4c13abd6f28594dc446f22106562ebe917fdbe76170f60a500c2a402ecc09e2",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realAdExchange/exchange-4_cpc_results.csv",
+      "rows": 1643,
+      "step_ms": 3600000,
+      "regular": false,
+      "daily_period": 24,
+      "admitted": false,
+      "reasons": [
+        "not_completely_regular"
+      ],
+      "previously_evaluated": false
+    },
+    {
+      "source": "realAdExchange/exchange-4_cpm_results.csv",
+      "family": "realAdExchange",
+      "raw_sha256": "4e5c955b632145b77b93fba4a5e3bf615d47e00416e17091d64e05ae109c760e",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realAdExchange/exchange-4_cpm_results.csv",
+      "rows": 1643,
+      "step_ms": 3600000,
+      "regular": false,
+      "daily_period": 24,
+      "admitted": false,
+      "reasons": [
+        "not_completely_regular"
+      ],
+      "previously_evaluated": false
+    },
+    {
+      "source": "realKnownCause/ambient_temperature_system_failure.csv",
+      "family": "realKnownCause",
+      "raw_sha256": "230b68ccca20f59d562afd5d24ad52939c9b784386bed0054018358bf9120581",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realKnownCause/ambient_temperature_system_failure.csv",
+      "rows": 7267,
+      "step_ms": 3600000,
+      "regular": false,
+      "daily_period": 24,
+      "admitted": false,
+      "reasons": [
+        "not_completely_regular"
+      ],
+      "previously_evaluated": true
+    },
+    {
+      "source": "realKnownCause/cpu_utilization_asg_misconfiguration.csv",
+      "family": "realKnownCause",
+      "raw_sha256": "58ba65dc0737cfbac11b51514476d50c438d44011232144bb8d93f392df58f9f",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realKnownCause/cpu_utilization_asg_misconfiguration.csv",
+      "rows": 18050,
+      "step_ms": 300000,
+      "regular": true,
+      "daily_period": 288,
+      "admitted": true,
+      "reasons": [],
+      "previously_evaluated": false,
+      "id": "realKnownCause__cpu_utilization_asg_misconfiguration",
+      "period": 288,
+      "train_lag_correlation": 0.8556322681143708,
+      "period_candidates": [
+        {
+          "period": 288,
+          "train_lag_correlation": 0.8556322681143708
+        }
+      ],
+      "origin_ms": 1400030040000,
+      "train_end_index": 7220,
+      "validation_end_index": 10830,
+      "validation_start_ms": 1402196040000,
+      "test_start_ms": 1403279040000,
+      "end_ms_exclusive": 1405445040000,
+      "input": "data/processed/expanded/realKnownCause__cpu_utilization_asg_misconfiguration.csv",
+      "processed_sha256": "48923014db861bece9f48df9ea1fdaf75e1011b5746c4f399ef6dfee6ff14e00",
+      "strong_periodicity": true
+    },
+    {
+      "source": "realKnownCause/ec2_request_latency_system_failure.csv",
+      "family": "realKnownCause",
+      "raw_sha256": "98378580aa80157e057c61d59d81daddccc6c65a2c0c800e3f01f603b8215c3f",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realKnownCause/ec2_request_latency_system_failure.csv",
+      "rows": 4032,
+      "step_ms": 300000,
+      "regular": false,
+      "daily_period": 288,
+      "admitted": false,
+      "reasons": [
+        "not_completely_regular"
+      ],
+      "previously_evaluated": true
+    },
+    {
+      "source": "realKnownCause/machine_temperature_system_failure.csv",
+      "family": "realKnownCause",
+      "raw_sha256": "92bf5b87fc7f9bba8ca0b7ec63ccaac8cb4a1371a258e8c29a10ae9c018d82a4",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realKnownCause/machine_temperature_system_failure.csv",
+      "rows": 22695,
+      "step_ms": 300000,
+      "regular": false,
+      "daily_period": 288,
+      "admitted": false,
+      "reasons": [
+        "not_completely_regular"
+      ],
+      "previously_evaluated": false
+    },
+    {
+      "source": "realKnownCause/nyc_taxi.csv",
+      "family": "realKnownCause",
+      "raw_sha256": "d8fa6f7f0734bf5c8be12c52a94e20a82664c397d9dec4449156bd453d32856d",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realKnownCause/nyc_taxi.csv",
+      "rows": 10320,
+      "step_ms": 1800000,
+      "regular": true,
+      "daily_period": 48,
+      "admitted": true,
+      "reasons": [],
+      "previously_evaluated": true,
+      "id": "realKnownCause__nyc_taxi",
+      "period": 336,
+      "train_lag_correlation": 0.9569817937709448,
+      "period_candidates": [
+        {
+          "period": 48,
+          "train_lag_correlation": 0.8381074014968829
+        },
+        {
+          "period": 336,
+          "train_lag_correlation": 0.9569817937709448
+        }
+      ],
+      "origin_ms": 1404172800000,
+      "train_end_index": 4128,
+      "validation_end_index": 6192,
+      "validation_start_ms": 1411603200000,
+      "test_start_ms": 1415318400000,
+      "end_ms_exclusive": 1422748800000,
+      "input": "data/processed/expanded/realKnownCause__nyc_taxi.csv",
+      "processed_sha256": "bd9f5fc6708c8f6307d70e964ffac113c733c6674927e97e4fb645dffc87135f",
+      "strong_periodicity": true
+    },
+    {
+      "source": "realKnownCause/rogue_agent_key_hold.csv",
+      "family": "realKnownCause",
+      "raw_sha256": "47b110baa8e3636574c1033dda1cce780873647fab58223d159d4fee6f180e86",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realKnownCause/rogue_agent_key_hold.csv",
+      "rows": 1882,
+      "step_ms": 300000,
+      "regular": false,
+      "daily_period": 288,
+      "admitted": false,
+      "reasons": [
+        "not_completely_regular",
+        "training_shorter_than_four_daily_cycles_plus_one"
+      ],
+      "previously_evaluated": false
+    },
+    {
+      "source": "realKnownCause/rogue_agent_key_updown.csv",
+      "family": "realKnownCause",
+      "raw_sha256": "9797cfef477c13306f7a33874ab4d6cf700f8f2c7e5825a2a5bc02004370909a",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realKnownCause/rogue_agent_key_updown.csv",
+      "rows": 5315,
+      "step_ms": 300000,
+      "regular": false,
+      "daily_period": 288,
+      "admitted": false,
+      "reasons": [
+        "not_completely_regular"
+      ],
+      "previously_evaluated": false
+    },
+    {
+      "source": "realTraffic/TravelTime_387.csv",
+      "family": "realTraffic",
+      "raw_sha256": "38e70e9ead8227fd023bff6e93247d5bc01ee008f781b921a156962419b399bb",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realTraffic/TravelTime_387.csv",
+      "rows": 2500,
+      "step_ms": 600000,
+      "regular": false,
+      "daily_period": 144,
+      "admitted": false,
+      "reasons": [
+        "not_completely_regular"
+      ],
+      "previously_evaluated": false
+    },
+    {
+      "source": "realTraffic/TravelTime_451.csv",
+      "family": "realTraffic",
+      "raw_sha256": "7c174adfc457b201cd111d60688f7ec37eb7201c8080790dc41eeff477bd7345",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realTraffic/TravelTime_451.csv",
+      "rows": 2162,
+      "step_ms": 600000,
+      "regular": false,
+      "daily_period": 144,
+      "admitted": false,
+      "reasons": [
+        "not_completely_regular"
+      ],
+      "previously_evaluated": false
+    },
+    {
+      "source": "realTraffic/occupancy_6005.csv",
+      "family": "realTraffic",
+      "raw_sha256": "cd357d7820d675074270fd976d4af1fc1e7854ecb764783028cbcb18d980c91d",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realTraffic/occupancy_6005.csv",
+      "rows": 2380,
+      "step_ms": 300000,
+      "regular": false,
+      "daily_period": 288,
+      "admitted": false,
+      "reasons": [
+        "not_completely_regular",
+        "training_shorter_than_four_daily_cycles_plus_one"
+      ],
+      "previously_evaluated": false
+    },
+    {
+      "source": "realTraffic/occupancy_t4013.csv",
+      "family": "realTraffic",
+      "raw_sha256": "5663a8122a300360eb51fbbd0f21706da05af1af55262926d6a226bb6d071704",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realTraffic/occupancy_t4013.csv",
+      "rows": 2500,
+      "step_ms": 300000,
+      "regular": false,
+      "daily_period": 288,
+      "admitted": false,
+      "reasons": [
+        "not_completely_regular",
+        "training_shorter_than_four_daily_cycles_plus_one"
+      ],
+      "previously_evaluated": false
+    },
+    {
+      "source": "realTraffic/speed_6005.csv",
+      "family": "realTraffic",
+      "raw_sha256": "7976e7596cd1e579696c737576e96a26fe041484472ed7d0a463ce2b094d7aa7",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realTraffic/speed_6005.csv",
+      "rows": 2500,
+      "step_ms": 300000,
+      "regular": false,
+      "daily_period": 288,
+      "admitted": false,
+      "reasons": [
+        "not_completely_regular",
+        "training_shorter_than_four_daily_cycles_plus_one"
+      ],
+      "previously_evaluated": false
+    },
+    {
+      "source": "realTraffic/speed_7578.csv",
+      "family": "realTraffic",
+      "raw_sha256": "15ba994384730cb5a2e6818f17ded1430b40d92eb7a08e5b1a48a445c8c350f6",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realTraffic/speed_7578.csv",
+      "rows": 1127,
+      "step_ms": 300000,
+      "regular": false,
+      "daily_period": 288,
+      "admitted": false,
+      "reasons": [
+        "not_completely_regular",
+        "training_shorter_than_four_daily_cycles_plus_one"
+      ],
+      "previously_evaluated": false
+    },
+    {
+      "source": "realTraffic/speed_t4013.csv",
+      "family": "realTraffic",
+      "raw_sha256": "fa5532d6f7db36cadc73e657fd4dfef05cb1ec44d4010243b314d3f1bbd6a7b5",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realTraffic/speed_t4013.csv",
+      "rows": 2495,
+      "step_ms": 300000,
+      "regular": false,
+      "daily_period": 288,
+      "admitted": false,
+      "reasons": [
+        "not_completely_regular",
+        "training_shorter_than_four_daily_cycles_plus_one"
+      ],
+      "previously_evaluated": false
+    },
+    {
+      "source": "realTweets/Twitter_volume_AAPL.csv",
+      "family": "realTweets",
+      "raw_sha256": "826f5cf404c2890784a7824f7102fd00cb134a4948e12e44ec320d095cbbc217",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realTweets/Twitter_volume_AAPL.csv",
+      "rows": 15902,
+      "step_ms": 300000,
+      "regular": true,
+      "daily_period": 288,
+      "admitted": true,
+      "reasons": [],
+      "previously_evaluated": false,
+      "id": "realTweets__Twitter_volume_AAPL",
+      "period": 288,
+      "train_lag_correlation": 0.006545069930138221,
+      "period_candidates": [
+        {
+          "period": 288,
+          "train_lag_correlation": 0.006545069930138221
+        }
+      ],
+      "origin_ms": 1424986973000,
+      "train_end_index": 6360,
+      "validation_end_index": 9541,
+      "validation_start_ms": 1426894973000,
+      "test_start_ms": 1427849273000,
+      "end_ms_exclusive": 1429757573000,
+      "input": "data/processed/expanded/realTweets__Twitter_volume_AAPL.csv",
+      "processed_sha256": "a710df0f233518edc6a1b067982c4d5466742e37bdbc251fa3bb52e3f2eda4f6",
+      "strong_periodicity": false
+    },
+    {
+      "source": "realTweets/Twitter_volume_AMZN.csv",
+      "family": "realTweets",
+      "raw_sha256": "234f5e63f19a62720dfb7ccfd6ecc8349b94d93b33ef8aafbdb17edda0b654f3",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realTweets/Twitter_volume_AMZN.csv",
+      "rows": 15831,
+      "step_ms": 300000,
+      "regular": true,
+      "daily_period": 288,
+      "admitted": true,
+      "reasons": [],
+      "previously_evaluated": false,
+      "id": "realTweets__Twitter_volume_AMZN",
+      "period": 288,
+      "train_lag_correlation": 0.18458250751652594,
+      "period_candidates": [
+        {
+          "period": 288,
+          "train_lag_correlation": 0.18458250751652594
+        }
+      ],
+      "origin_ms": 1424986973000,
+      "train_end_index": 6332,
+      "validation_end_index": 9498,
+      "validation_start_ms": 1426886573000,
+      "test_start_ms": 1427836373000,
+      "end_ms_exclusive": 1429736273000,
+      "input": "data/processed/expanded/realTweets__Twitter_volume_AMZN.csv",
+      "processed_sha256": "b7370a3fc375bd28acf0b61aa250c9564f455d472ebe1a0535b38a422b920fc0",
+      "strong_periodicity": false
+    },
+    {
+      "source": "realTweets/Twitter_volume_CRM.csv",
+      "family": "realTweets",
+      "raw_sha256": "e7133bf26479623d58fc7367107aea1cd7df6020420dece48b0eee4d26cdb28a",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realTweets/Twitter_volume_CRM.csv",
+      "rows": 15902,
+      "step_ms": 300000,
+      "regular": true,
+      "daily_period": 288,
+      "admitted": true,
+      "reasons": [],
+      "previously_evaluated": false,
+      "id": "realTweets__Twitter_volume_CRM",
+      "period": 288,
+      "train_lag_correlation": 0.10325179739778868,
+      "period_candidates": [
+        {
+          "period": 288,
+          "train_lag_correlation": 0.10325179739778868
+        }
+      ],
+      "origin_ms": 1424986973000,
+      "train_end_index": 6360,
+      "validation_end_index": 9541,
+      "validation_start_ms": 1426894973000,
+      "test_start_ms": 1427849273000,
+      "end_ms_exclusive": 1429757573000,
+      "input": "data/processed/expanded/realTweets__Twitter_volume_CRM.csv",
+      "processed_sha256": "e584c2e0df0e3773183253a0884066de676456658ecb54280684ed531d6dbcd7",
+      "strong_periodicity": false
+    },
+    {
+      "source": "realTweets/Twitter_volume_CVS.csv",
+      "family": "realTweets",
+      "raw_sha256": "f0bdc89cba3dd2265b47069187c750eeae18ef48f76f86067ee26ea1af9c3114",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realTweets/Twitter_volume_CVS.csv",
+      "rows": 15853,
+      "step_ms": 300000,
+      "regular": true,
+      "daily_period": 288,
+      "admitted": true,
+      "reasons": [],
+      "previously_evaluated": false,
+      "id": "realTweets__Twitter_volume_CVS",
+      "period": 288,
+      "train_lag_correlation": 0.015216131738594995,
+      "period_candidates": [
+        {
+          "period": 288,
+          "train_lag_correlation": 0.015216131738594995
+        }
+      ],
+      "origin_ms": 1424986973000,
+      "train_end_index": 6341,
+      "validation_end_index": 9511,
+      "validation_start_ms": 1426889273000,
+      "test_start_ms": 1427840273000,
+      "end_ms_exclusive": 1429742873000,
+      "input": "data/processed/expanded/realTweets__Twitter_volume_CVS.csv",
+      "processed_sha256": "eca755bd65f7b7ff9b56921fc3a975f15aa84a62560e9ef97033591e7c15eb29",
+      "strong_periodicity": false
+    },
+    {
+      "source": "realTweets/Twitter_volume_FB.csv",
+      "family": "realTweets",
+      "raw_sha256": "a7096bd646759486bda6796b5600cd33a4590f0842bf274ea7acba001b3ba591",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realTweets/Twitter_volume_FB.csv",
+      "rows": 15833,
+      "step_ms": 300000,
+      "regular": true,
+      "daily_period": 288,
+      "admitted": true,
+      "reasons": [],
+      "previously_evaluated": false,
+      "id": "realTweets__Twitter_volume_FB",
+      "period": 288,
+      "train_lag_correlation": 0.17685468897905607,
+      "period_candidates": [
+        {
+          "period": 288,
+          "train_lag_correlation": 0.17685468897905607
+        }
+      ],
+      "origin_ms": 1424986973000,
+      "train_end_index": 6333,
+      "validation_end_index": 9499,
+      "validation_start_ms": 1426886873000,
+      "test_start_ms": 1427836673000,
+      "end_ms_exclusive": 1429736873000,
+      "input": "data/processed/expanded/realTweets__Twitter_volume_FB.csv",
+      "processed_sha256": "50fc62da3c1113b09a97f89899fe9844b330d5a16da9866a5202990af21fbe8d",
+      "strong_periodicity": false
+    },
+    {
+      "source": "realTweets/Twitter_volume_GOOG.csv",
+      "family": "realTweets",
+      "raw_sha256": "3a39cc23d1ff6a0f234b55298d0c46c21d2e94ddb81a0dad9e1e46e3aaa9ec90",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realTweets/Twitter_volume_GOOG.csv",
+      "rows": 15842,
+      "step_ms": 300000,
+      "regular": true,
+      "daily_period": 288,
+      "admitted": true,
+      "reasons": [],
+      "previously_evaluated": false,
+      "id": "realTweets__Twitter_volume_GOOG",
+      "period": 288,
+      "train_lag_correlation": 0.13881378632629013,
+      "period_candidates": [
+        {
+          "period": 288,
+          "train_lag_correlation": 0.13881378632629013
+        }
+      ],
+      "origin_ms": 1424986973000,
+      "train_end_index": 6336,
+      "validation_end_index": 9505,
+      "validation_start_ms": 1426887773000,
+      "test_start_ms": 1427838473000,
+      "end_ms_exclusive": 1429739573000,
+      "input": "data/processed/expanded/realTweets__Twitter_volume_GOOG.csv",
+      "processed_sha256": "514308aed6bb018c3ec04facf50eb31e83d141c74813f7ccd624e22b35fd551a",
+      "strong_periodicity": false
+    },
+    {
+      "source": "realTweets/Twitter_volume_IBM.csv",
+      "family": "realTweets",
+      "raw_sha256": "4309bd56d28ddcbdc168e207da9717395fa2e9f74dba41fa768e0f7da8a116fa",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realTweets/Twitter_volume_IBM.csv",
+      "rows": 15893,
+      "step_ms": 300000,
+      "regular": true,
+      "daily_period": 288,
+      "admitted": true,
+      "reasons": [],
+      "previously_evaluated": false,
+      "id": "realTweets__Twitter_volume_IBM",
+      "period": 288,
+      "train_lag_correlation": 0.2585816805255285,
+      "period_candidates": [
+        {
+          "period": 288,
+          "train_lag_correlation": 0.2585816805255285
+        }
+      ],
+      "origin_ms": 1424986973000,
+      "train_end_index": 6357,
+      "validation_end_index": 9535,
+      "validation_start_ms": 1426894073000,
+      "test_start_ms": 1427847473000,
+      "end_ms_exclusive": 1429754873000,
+      "input": "data/processed/expanded/realTweets__Twitter_volume_IBM.csv",
+      "processed_sha256": "ca216ea23e103a4bef418dbaf4ad747c8c9e4d16889dc3ae77b4a821b23620f7",
+      "strong_periodicity": false
+    },
+    {
+      "source": "realTweets/Twitter_volume_KO.csv",
+      "family": "realTweets",
+      "raw_sha256": "f3aa8157043c6569911031535bd1f7a73b428b5a2d95238d79b9d5b88ceebbd2",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realTweets/Twitter_volume_KO.csv",
+      "rows": 15851,
+      "step_ms": 300000,
+      "regular": true,
+      "daily_period": 288,
+      "admitted": true,
+      "reasons": [],
+      "previously_evaluated": false,
+      "id": "realTweets__Twitter_volume_KO",
+      "period": 288,
+      "train_lag_correlation": 0.04672573921927679,
+      "period_candidates": [
+        {
+          "period": 288,
+          "train_lag_correlation": 0.04672573921927679
+        }
+      ],
+      "origin_ms": 1424986973000,
+      "train_end_index": 6340,
+      "validation_end_index": 9510,
+      "validation_start_ms": 1426888973000,
+      "test_start_ms": 1427839973000,
+      "end_ms_exclusive": 1429742273000,
+      "input": "data/processed/expanded/realTweets__Twitter_volume_KO.csv",
+      "processed_sha256": "8244703c6b1efb0e81ffee01283d72a70b34b7472f000f260cf21b27738914ba",
+      "strong_periodicity": false
+    },
+    {
+      "source": "realTweets/Twitter_volume_PFE.csv",
+      "family": "realTweets",
+      "raw_sha256": "18d2804d6a5dae63fe711baaba9242dce38a32bfade3dcdee1d8a7c1a866e41b",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realTweets/Twitter_volume_PFE.csv",
+      "rows": 15858,
+      "step_ms": 300000,
+      "regular": true,
+      "daily_period": 288,
+      "admitted": true,
+      "reasons": [],
+      "previously_evaluated": false,
+      "id": "realTweets__Twitter_volume_PFE",
+      "period": 288,
+      "train_lag_correlation": 0.15276353309601745,
+      "period_candidates": [
+        {
+          "period": 288,
+          "train_lag_correlation": 0.15276353309601745
+        }
+      ],
+      "origin_ms": 1424986973000,
+      "train_end_index": 6343,
+      "validation_end_index": 9514,
+      "validation_start_ms": 1426889873000,
+      "test_start_ms": 1427841173000,
+      "end_ms_exclusive": 1429744373000,
+      "input": "data/processed/expanded/realTweets__Twitter_volume_PFE.csv",
+      "processed_sha256": "7c9826d6eeb6f9b624582b037fdf7716274b1b4ca476351daac333fa279b2ac1",
+      "strong_periodicity": false
+    },
+    {
+      "source": "realTweets/Twitter_volume_UPS.csv",
+      "family": "realTweets",
+      "raw_sha256": "be50f06bbb9d020f37653c8c5cf19af63f77aa0019d8cf10849d91f4af455af4",
+      "source_url": "https://raw.githubusercontent.com/numenta/NAB/ea702d75cc2258d9d7dd35ca8e5e2539d71f3140/data/realTweets/Twitter_volume_UPS.csv",
+      "rows": 15866,
+      "step_ms": 300000,
+      "regular": true,
+      "daily_period": 288,
+      "admitted": true,
+      "reasons": [],
+      "previously_evaluated": false,
+      "id": "realTweets__Twitter_volume_UPS",
+      "period": 288,
+      "train_lag_correlation": 0.014430208483578752,
+      "period_candidates": [
+        {
+          "period": 288,
+          "train_lag_correlation": 0.014430208483578752
+        }
+      ],
+      "origin_ms": 1424986973000,
+      "train_end_index": 6346,
+      "validation_end_index": 9519,
+      "validation_start_ms": 1426890773000,
+      "test_start_ms": 1427842673000,
+      "end_ms_exclusive": 1429746773000,
+      "input": "data/processed/expanded/realTweets__Twitter_volume_UPS.csv",
+      "processed_sha256": "5ed23c4c256fc40b12c9568a9fffcd770c78d7dfdbff93bc4639b7ae30fe1fca",
+      "strong_periodicity": false
+    }
+  ],
+  "candidate_count": 47,
+  "admitted_count": 21,
+  "label_sha256": "1e1fbc4601321aad8d0f8b3784c8134299379f68f6c1f7777565f8ffd57ab6b1",
+  "pinned_git_tree_sha": "7748725097344fe37386eb356e69d91c6b14b9f0",
+  "label_access": "raw-byte blob verification only; labels not parsed during admission or period selection"
+}

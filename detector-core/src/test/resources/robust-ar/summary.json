@@ -1,0 +1,12 @@
+{
+  "fixture_cases": 6,
+  "scored_rows_each": 82,
+  "input_rows": 100,
+  "epsilon": 0.0008376689999999992,
+  "reference_sha256": {
+    "scripts/predictive_baseline.py": "1638a01a4e6a04283ddfa607aa23c16f0099bede9943d31942d29bf06f1c8ffa",
+    "scripts/benchmark_iteration2.py": "7a7457a3a28a42230dc91536ff48bc6c35e9fbf767d1bb242a09101252d61230",
+    "configs/iteration2.json": "323e45b246a6b4df406fcef53421500ac2407d6b9aed280646093cba3be75934",
+    "results/iteration2/development-v8/selection.json": "0d3dcc0c379bafe3fefa4d9b68c9f0211ce91826fb464b79b270c321888f3a98"
+  }
+}

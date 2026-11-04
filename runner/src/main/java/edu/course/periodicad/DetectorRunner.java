@@ -15,11 +15,15 @@ public final class DetectorRunner {
         return p;
     }
     public static void main(String[] args) throws Exception {
-        if (args.length == 0) throw new IllegalArgumentException("Commands: score INPUT OUTPUT CONFIG | batch JOBS.tsv | compare INPUT CONFIG OUTPUT_DIR | benchmark INPUT CONFIG OUTPUT_DIR [REPEATS] | smoke/import-csv/verify-csv/query/unregister-echo");
+        if (args.length == 0) throw new IllegalArgumentException("Commands: score/score-diagnostics INPUT OUTPUT CONFIG | events SCORES.csv EVENTS.csv CONFIG.properties | batch JOBS.tsv | compare INPUT CONFIG OUTPUT_DIR | benchmark INPUT CONFIG OUTPUT_DIR [REPEATS] | smoke/import-csv/verify-csv/query/unregister-echo");
         switch (args[0]) {
-            case "score" -> {
-                if (args.length != 4) throw new IllegalArgumentException("score INPUT.csv OUTPUT.csv CONFIG.properties");
-                DetectorCsv.score(Path.of(args[1]),Path.of(args[2]),DetectorConfig.fromProperties(properties(Path.of(args[3]))));
+            case "score", "score-diagnostics" -> {
+                if (args.length != 4) throw new IllegalArgumentException(args[0]+" INPUT.csv OUTPUT.csv CONFIG.properties");
+                DetectorCsv.score(Path.of(args[1]),Path.of(args[2]),DetectorConfig.fromProperties(properties(Path.of(args[3]))), args[0].equals("score-diagnostics"));
+            }
+            case "events" -> {
+                if (args.length != 4) throw new IllegalArgumentException("events SCORES.csv EVENTS.csv CONFIG.properties");
+                AlarmCsv.events(Path.of(args[1]), Path.of(args[2]), AlarmGateConfig.fromProperties(properties(Path.of(args[3]))));
             }
             case "batch" -> {
                 if (args.length != 2) throw new IllegalArgumentException("batch JOBS.tsv");

@@ -1,0 +1,17 @@
+{
+  "source_sha256": {
+    "results/experiment-focus/effect-summary/comparison.csv": "0e5f309a43f494e8bd2ca78a84dc69264517bd15ca42777f5c684c52f570bff5",
+    "results/experiment-focus/effect-summary/逐序列对比.csv": "04c7a4dba7fb0b60173603bf90efbb0cf3d8b7b0f72b7a9898f81d94bf72a432",
+    "results/experiment-focus/effect-summary/逐窗口对比.csv": "37b5dcb0ab3646d2c02e64c451717e561540f94f45d2ad351774ce8fd0bb9d24",
+    "results/experiment-focus/effect-summary/融合模式与阈值.json": "b23d91a40553e4a10fbcd70f5d7ffd0a9e6f83e3bccafb431a1bf5f6b5a71cd0",
+    "results/experiment-focus/two-mode-fusion/selection.json": "b23d91a40553e4a10fbcd70f5d7ffd0a9e6f83e3bccafb431a1bf5f6b5a71cd0",
+    "results/experiment-focus/two-mode-fusion/metrics.json": "e5f0dc01cc6eb410f1dd22159f56a67b39f6a091c8e2dcfceb3ced5a1b739e74",
+    "results/experiment-focus/fast-fusion-v1/selection.json": "0131bea9cbae2c9105d1ca132ec95c1fc6e25de14764327cb2ff905a946edc66",
+    "configs/expanded-manifest.json": "c46785018a347b68759bbd8a6a21f833b32c255b00c064ee070862cc49587c8e",
+    "results/iteration2/catalog/nab-series-catalog.csv": "5ea2c38b4963454d40f23e994076d0cfe292dcdd5a55ef616ad07128bc1a9548",
+    "results/iteration2/catalog/nab-window-results.csv": "963f4d36c567f07a636e4e891122527c8ac238e57966e00872a723c951c7b1e7"
+  },
+  "nab_commit": "ea702d75cc2258d9d7dd35ca8e5e2539d71f3140",
+  "processing": "Filter existing results and sum existing per-series event counts for family summaries; no detector, threshold selection, or experiment rerun.",
+  "selection": "Existing validation selection retained; all NAB data was development data."
+}

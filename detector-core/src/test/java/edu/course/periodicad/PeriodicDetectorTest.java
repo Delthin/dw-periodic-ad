@@ -27,7 +27,7 @@ class PeriodicDetectorTest {
         assertEquals(0.5,d.accept(13,20.0).residualCenter(),1e-12);
     }
     @Test void directFreezeAndBoundedUseDifferentUpdatesButSameRawResidual() {
-        for (var strategy : DetectorConfig.Strategy.values()) {
+        for (var strategy : List.of(BOUNDED, DIRECT, FREEZE)) {
             PeriodicDetector d=warm(config(strategy,PERIODIC,null));
             Detection p=d.accept(12,14.0);
             if (strategy==DIRECT) assertEquals(14,p.update());
@@ -37,6 +37,57 @@ class PeriodicDetectorTest {
         PeriodicDetector zero=warm(config(BOUNDED,PERIODIC,null));
         Detection p=zero.accept(12,10.0);
         assertEquals(0,p.score()); assertFalse(p.flag()); assertEquals(10,p.update());
+    }
+    @Test void guardedRejectsBothHistoriesOnAnomaliesAndKeepsWarmup() {
+        PeriodicDetector guarded = warm(config(GUARDED, PERIODIC, null));
+        PeriodicDetector reference = warm(config(GUARDED, PERIODIC, null));
+        for (int t = 12; t < 20; t += 2) {
+            Detection anomaly = guarded.accept(t, 14.0);
+            assertTrue(anomaly.flag()); assertNull(anomaly.update());
+            assertEquals(10, anomaly.baseline());
+            assertEquals(0, anomaly.residualCenter());
+            assertEquals(0.7413, anomaly.scale(), 1e-12);
+            assertEquals(5.395926075812762, anomaly.score(), 1e-12);
+        }
+        // Omitting the anomalous samples entirely must give identical next state in BOTH histories.
+        assertEquals(reference.accept(20, 10.0), guarded.accept(20, 10.0));
+        assertEquals(reference.accept(21, 20.0), guarded.accept(21, 20.0));
+    }
+    @Test void guardedSafePointsUseBoundedUpdatesAndOriginalResiduals() {
+        PeriodicDetector guarded = warm(config(GUARDED, PERIODIC, null));
+        PeriodicDetector bounded = warm(config(BOUNDED, PERIODIC, null));
+        Detection safe = guarded.accept(12, 12.5);
+        assertFalse(safe.flag()); assertEquals(12.2239, safe.update(), 1e-12);
+        assertEquals(bounded.accept(12, 12.5), safe);
+        Detection next = guarded.accept(13, 22.5);
+        assertFalse(next.flag()); assertEquals(0.5, next.residualCenter());
+        assertEquals(bounded.accept(13, 22.5), next);
+        // R=[0,1,2.5,2.5] has median 1.75; a clipped first residual would give 1.61195.
+        Detection third = guarded.accept(14, 10.0);
+        assertEquals(1.75, third.residualCenter());
+        assertEquals(bounded.accept(14, 10.0), third);
+    }
+    @Test void guardedDoesNotChangeFixedFreezeAndRollingSkipsFlaggedHistory() {
+        PeriodicDetector guarded = warm(config(GUARDED, FIXED, 12L));
+        PeriodicDetector fixed = warm(config(DIRECT, FIXED, 12L));
+        for (int t = 12; t < 24; t++) assertEquals(fixed.accept(t, 1000.0), guarded.accept(t, 1000.0));
+        var rolling = new PeriodicDetector(new DetectorConfig(1,0,2,1,2,4,3,0.01,GUARDED,ROLLING_Z,null));
+        assertNull(rolling.accept(0, 1.0)); assertNull(rolling.accept(1, 3.0));
+        assertNull(rolling.accept(2, 100.0).update());
+        Detection safe = rolling.accept(3, 2.0);
+        assertEquals(2, safe.residualCenter()); assertEquals(1, safe.scale());
+        assertEquals(0, safe.score()); assertEquals(2, safe.update());
+    }
+    @Test void defaultBoundedOutputRemainsExactlyExplicitBounded() {
+        var defaults = DetectorConfig.fromMap(Map.of("step_ms", "1", "period", "2", "k", "4", "window", "4", "epsilon", "0.01"));
+        assertEquals(BOUNDED, defaults.strategy());
+        var a = new PeriodicDetector(defaults);
+        var b = new PeriodicDetector(config(BOUNDED, PERIODIC, null));
+        for (int i = 0; i < 100; i++) {
+            double value = i % 9 == 0 ? 1000 : 10 + 10 * (i % 2) + i % 3;
+            assertEquals(b.accept(i, value), a.accept(i, value));
+        }
+        assertEquals(GUARDED, DetectorConfig.fromMap(Map.of("step_ms", "1", "period", "2", "strategy", "guarded")).strategy());
     }
     @Test void prefixUnaffectedByFutureAndInstancesIndependent() {
         PeriodicDetector a=new PeriodicDetector(config(BOUNDED,PERIODIC,null));

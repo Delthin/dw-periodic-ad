@@ -3,8 +3,13 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 WORKTREE="$(pwd -P)"
-COMMON="$(git rev-parse --git-common-dir)"
-MAIN_ROOT="$(cd "$COMMON/.." && pwd -P)"
+if GIT_ROOT="$(git rev-parse --show-toplevel 2>/dev/null)" && [[ "$(cd "$GIT_ROOT" && pwd -P)" == "$WORKTREE" ]]; then
+  COMMON="$(git rev-parse --git-common-dir)"
+  MAIN_ROOT="$(cd "$COMMON/.." && pwd -P)"
+else
+  # Submission ZIPs have no .git; preserve the same local-runtime boundary.
+  MAIN_ROOT="$WORKTREE"
+fi
 JAVA_HOME="${JAVA_HOME:-/opt/homebrew/opt/openjdk@17/libexec/openjdk.jdk/Contents/Home}"
 export JAVA_HOME
 JAVA="$JAVA_HOME/bin/java"

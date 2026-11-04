@@ -1,0 +1,50 @@
+{
+  "version": 8,
+  "seed": 20261103,
+  "purpose": "NAB is an already exposed development benchmark. Improve design using documented development iterations; select each series' parameters only from training/background and injected validation. Freeze final implementation before reading the new UCR test labels.",
+  "nab_manifest": "configs/expanded-manifest.json",
+  "split": "unchanged first40% train, next20% validation, last40% development-test",
+  "injection": {
+    "fractions": [0.10, 0.26, 0.42, 0.58, 0.74, 0.90],
+    "short_durations": [1, 2, 4, 1, 2, 4],
+    "long_period_fractions": [0.0625, 0.125, 0.25, 0.0625, 0.125, 0.25],
+    "amplitudes": [3, 6, 3, 6, 6, 3],
+    "signs": [1, -1, 1, -1, 1, -1],
+    "amplitude_unit": "max(1.4826*MAD(training lag-period differences), .02*training IQR, 1e-6)",
+    "shape": "six local flatlines at training median +/- 3*noise; duration as long suite; outside original injection region all original values retained",
+    "duration_limit": "at most half the distance to the next injection start, leaving a recovery interval"
+  },
+  "threshold_quantiles": [0.95, 0.975, 0.99, 0.9925, 0.995, 0.9975, 0.999, 1.0],
+  "threshold_quantile_method": "higher",
+  "validation_point_alarm_budget": 0.005,
+  "validation_event_alarm_budget": 1,
+  "validation_events_per_day": 0.07142857142857142,
+  "injection_outside_point_budget": 0.01,
+  "selection": "maximize mean event F2 across short/long/flatline suites subject to both point budgets and background events <= max(1, validation days / 14); observed-order-statistic quantiles (higher) respect finite-sample point quotas, then mean recall, then lower outside-injection alarm fraction, then lower background alarm fraction, then higher threshold. If no injection-tail-feasible candidate, minimize tail excess among background-feasible candidates, then maximize mean F2. Never use real anomaly labels.",
+  "event_merge_gap_ms": 3600000,
+  "calibration_metric": "F2=5TP/(5TP+4FN+FP); not point-adjusted",
+  "candidate_evidence": {
+    "base": ["periodic", "robust_ar"],
+    "base_selection": "training_periodicity",
+    "routing": "training lag correlation >= .5 -> periodic; otherwise robust_ar; no selection between bases using injection fit",
+    "autoregressive": {"lags": "unique(1,2,3,6,12,P,2P)", "train_limit": 5000, "lag_clip": 6, "ridge": 0.001, "huber_delta": 1.345, "irls_iterations": 8},
+    "autoregressive_scores": ["point", "ewma6", "ewma12"],
+    "autoregressive_context": "signed geometric mean of absolute AR innovation z and rolling-level z, each with a training-derived scale floor",
+    "base_window": "period",
+    "scale_floor": "training median of emitted scale * 0.5, frozen before validation",
+    "winsor_clip": 6,
+    "ewma12_clip": 4,
+    "channel_normalization": "99th percentile of absolute channel scores on unmodified validation background, with 1e-8 floor",
+    "scores": ["ewma6", "ewma12"]
+  },
+  "reference_algorithms": "periodic_point and periodic_robust_ewma (span12/cap4), without learned evidence floor or normalizer; thresholds calibrated under the identical current protocol",
+  "baselines": {
+    "isolation_forest": {"widths": [1, 8, 24], "trees": 200, "max_samples": 256, "train_limit": 5000},
+    "local_outlier_factor": {"widths": [1, 8, 24], "neighbors": 20, "train_limit": 5000},
+    "spectral_residual": {"windows": [64, 128, 256], "mag_window": 3, "score_window": 21},
+    "left_matrix_profile": {"windows": [16, 48], "history": 2048, "exclusion": "window; fully nonoverlapping left references"}
+  },
+  "ucr_holdout_admission": "official archive, all id%5==0 with n<=100000, train_end>=2048 and finite values; no filtering by labels, periodicity or performance",
+  "ucr_split": "first80% of official train prefix is fit; final20% of official train prefix is validation; official remainder is held-out test; filenames' last two anomaly indices not parsed before final freeze",
+  "ucr_metrics": "strict top1 localization on test; auxiliary top1 expands each boundary by max(100, anomaly length) samples and is not the primary score; one-based annotation sensitivity is separate; calibrated event/FPR results use sample gap max(1,P//16). Exact definitions are frozen in configs/ucr-evaluation.json."
+}

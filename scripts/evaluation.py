@@ -149,12 +149,15 @@ def reference_periodic(timestamps, values, config):
         scale = max(float(epsilon),1.4826*float(np.median(np.abs(r-center))))
         score = abs(residual-center)/scale
         flag = score > tau
-        update = baseline+center+float(np.clip(residual-center,-clip*scale,clip*scale)) if strategy == "bounded" else float(x)
-        # For freeze, update is the candidate raw value; no insertion when flagged.
+        update = baseline+center+float(np.clip(residual-center,-clip*scale,clip*scale)) if strategy in ("bounded", "guarded") else float(x)
+        if strategy == "guarded" and flag:
+            update = None
+        # For legacy freeze, update is the candidate raw value; no insertion when flagged.
         result.append((time,float(x),baseline,residual,center,scale,score,flag,update,phase))
-        if strategy != "freeze" or not flag:
+        if strategy not in ("freeze", "guarded") or not flag:
             history.append(update)
             del history[:-k]
-        residuals.append(residual)
-        del residuals[:-w]
+        if strategy != "guarded" or not flag:
+            residuals.append(residual)
+            del residuals[:-w]
     return pd.DataFrame(result, columns=["timestamp_ms","value","baseline","residual","residual_center","scale","score","flag","update","phase"])

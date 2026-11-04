@@ -12,12 +12,6 @@ import static edu.course.periodicad.ExecutionEvidence.*;
 
 /** Streaming correctness and fair local-client timing. Constructors do not start services. */
 final class DatabaseExperiments {
-    private static Scored udfPoint(RowRecord row) {
-        var f=row.getFields();
-        if(f.size()!=2 || f.get(0).getDataType()!=TSDataType.DOUBLE || f.get(1).getDataType()!=TSDataType.BOOLEAN)
-            throw new IllegalStateException("Expected UDF score DOUBLE and flag BOOLEAN at "+row.getTimestamp());
-        return new Scored(row.getTimestamp(),f.get(0).getDoubleV(),f.get(1).getBoolV());
-    }
     private static Scored udfScorePoint(RowRecord row,double tau) {
         var f=row.getFields();
         if(f.size()!=1 || f.get(0).getDataType()!=TSDataType.DOUBLE)
@@ -53,8 +47,34 @@ final class DatabaseExperiments {
         if(a.rows==0) throw new IllegalStateException("No formal scores: extend input or reduce warmup parameters");
         return new Comparison(a.rows,a.finish(),b.finish(),maxAbs,maxRel);
     }
+    static Comparison compareModes(DetectorCsv csv, DetectorConfig config, AlarmGateConfig gateConfig,
+                                   SessionDataSet data, BufferedWriter scores, BufferedWriter alarms) throws Exception {
+        PeriodicDetector detector = new PeriodicDetector(config);
+        AlarmGate gate = new AlarmGate(gateConfig);
+        AlarmGate.Result[] expected = new AlarmGate.Result[1];
+        alarms.write("timestamp_ms,local_event,db_event,local_active,db_active,pass\n");
+        return compareStreams(() -> {
+            Scored point = nextLocal(csv, detector);
+            expected[0] = point == null ? null : gate.accept(point.timestamp(), point.score());
+            return point;
+        }, () -> {
+            if (!data.hasNext()) return null;
+            RowRecord row = data.next();
+            var f = row.getFields();
+            if (f.size() != 4 || f.get(0).getDataType() != TSDataType.DOUBLE
+                    || f.subList(1,4).stream().anyMatch(v -> v.getDataType() != TSDataType.BOOLEAN))
+                throw new IllegalStateException("Expected UDF score/flag/event/active at " + row.getTimestamp());
+            boolean event = f.get(2).getBoolV(), active = f.get(3).getBoolV();
+            AlarmGate.Result local = expected[0];
+            boolean pass = local != null && local.notification() == event && local.active() == active;
+            alarms.write(row.getTimestamp()+","+(local == null ? "" : local.notification())+","+event+","+(local == null ? "" : local.active())+","+active+","+pass+"\n");
+            if (!pass) throw new IllegalStateException("CSV/UDF event/active mismatch at " + row.getTimestamp());
+            return new Scored(row.getTimestamp(), f.get(0).getDoubleV(), f.get(1).getBoolV());
+        }, scores);
+    }
     static void compare(Path input,Path configPath,Path output) throws Exception {
         Properties properties=DetectorRunner.properties(configPath); DetectorConfig config=DetectorConfig.fromProperties(properties);
+        AlarmGateConfig gateConfig = AlarmGateConfig.fromMap(configMap(properties), config);
         DetectorDatabase.Input meta=DetectorDatabase.inspect(input,config);
         String device=DetectorDatabase.device(properties);
         Files.createDirectories(output);
@@ -64,21 +84,26 @@ final class DatabaseExperiments {
             Comparison[] comparisons=new Comparison[2];
             for(int query=0;query<2;query++) {
                 try(DetectorCsv csv=new DetectorCsv(input);
-                    SessionDataSet data=db.session.executeQueryStatement(DetectorDatabase.udfQuery(device,meta,config));
-                    BufferedWriter writer=Files.newBufferedWriter(output.resolve("comparison_"+(query+1)+".csv"),StandardCharsets.UTF_8)) {
-                    PeriodicDetector detector=new PeriodicDetector(config);
-                    comparisons[query]=compareStreams(()->nextLocal(csv,detector),()->data.hasNext()?udfPoint(data.next()):null,writer);
+                    SessionDataSet data=db.session.executeQueryStatement(DetectorDatabase.udfQuery(device,meta,config,gateConfig));
+                    BufferedWriter writer=Files.newBufferedWriter(output.resolve("comparison_"+(query+1)+".csv"),StandardCharsets.UTF_8);
+                    BufferedWriter alarms=Files.newBufferedWriter(output.resolve("alarms_"+(query+1)+".csv"),StandardCharsets.UTF_8)) {
+                    comparisons[query]=compareModes(csv,config,gateConfig,data,writer,alarms);
                 }
             }
             Comparison a=comparisons[0],b=comparisons[1];
             if(a.rows()!=b.rows() || !a.databaseSha256().equals(b.databaseSha256()))
                 throw new IllegalStateException("Repeated UDF query retained/leaked state or changed its output");
-            Files.writeString(summary,"{\n  \"passed\": true,\n  \"device\": "+json(device)+",\n  \"detector_config\": "+json(config.toString())+",\n  \"udf_query\": "+json(DetectorDatabase.udfQuery(device,meta,config))+",\n  \"input_first_ms\": "+meta.first()+",\n  \"input_last_ms\": "+meta.last()+",\n  \"raw_returned_rows\": "+meta.rows()+",\n  \"udf_returned_rows\": "+a.rows()+",\n  \"output_rows\": "+a.rows()+",\n  \"queries\": 2,\n  \"independent_repeat_identical\": true,\n  \"abs_tolerance\": 1e-9,\n  \"rel_tolerance\": 1e-9,\n  \"max_absolute_error\": "+Math.max(a.maxAbsoluteError(),b.maxAbsoluteError())+",\n  \"max_relative_error\": "+Math.max(a.maxRelativeError(),b.maxRelativeError())+",\n  \"csv_sha256\": "+json(a.localSha256())+",\n  \"udf_sha256\": "+json(a.databaseSha256())+"\n}\n",StandardCharsets.UTF_8);
+            Files.writeString(summary,"{\n  \"passed\": true,\n  \"device\": "+json(device)+",\n  \"detector_config\": "+json(config.toString())+",\n  \"udf_query\": "+json(DetectorDatabase.udfQuery(device,meta,config,gateConfig))+",\n  \"input_first_ms\": "+meta.first()+",\n  \"input_last_ms\": "+meta.last()+",\n  \"raw_returned_rows\": "+meta.rows()+",\n  \"udf_returned_rows\": "+a.rows()+",\n  \"output_rows\": "+a.rows()+",\n  \"queries\": 2,\n  \"validated_modes\": [\"score\",\"flag\",\"event\",\"active\"],\n  \"all_event_active_rows_equal\": true,\n  \"independent_repeat_identical\": true,\n  \"abs_tolerance\": 1e-9,\n  \"rel_tolerance\": 1e-9,\n  \"max_absolute_error\": "+Math.max(a.maxAbsoluteError(),b.maxAbsoluteError())+",\n  \"max_relative_error\": "+Math.max(a.maxRelativeError(),b.maxRelativeError())+",\n  \"csv_sha256\": "+json(a.localSha256())+",\n  \"udf_sha256\": "+json(a.databaseSha256())+"\n}\n",StandardCharsets.UTF_8);
         } catch(Exception e) {
             Files.writeString(summary,"{\"passed\":false,\"device\":"+json(device)+",\"error\":"+json(e.toString())+"}\n",StandardCharsets.UTF_8);
             throw e;
         }
         System.out.println("PASS compare: "+summary);
+    }
+    private static Map<String,String> configMap(Properties properties) {
+        Map<String,String> map = new HashMap<>();
+        properties.forEach((k,v) -> map.put(k.toString(), v.toString()));
+        return map;
     }
     record Timing(int round,boolean warmup,String order,String path,double elapsedMs,Double algorithmMs,
                   long rawReturnedRows,long udfReturnedRows,long outputRows,String sha256,
@@ -99,7 +124,7 @@ final class DatabaseExperiments {
         try(SessionDataSet data=db.session.executeQueryStatement(sql)) {
             while(data.hasNext()) {
                 RowRecord row=data.next();
-                if(udf) { udfRows++; digest.add(udfScorePoint(row,config.tau())); }
+                if(udf) { udfRows++; digest.add(udfScorePoint(row,config.scoreThreshold())); }
                 else {
                     rawRows++;
                     if(row.getFields().size()!=1 || row.getFields().get(0).getDataType()!=TSDataType.DOUBLE)
@@ -159,7 +184,7 @@ final class DatabaseExperiments {
             double[] a=timings.stream().filter(t->!t.warmup()&&t.path().equals("A_udf")).mapToDouble(Timing::elapsedMs).toArray();
             double[] b=timings.stream().filter(t->!t.warmup()&&t.path().equals("B_raw_java")).mapToDouble(Timing::elapsedMs).toArray();
             double[] algo=timings.stream().filter(t->!t.warmup()&&t.path().equals("B_raw_java")).mapToDouble(Timing::algorithmMs).toArray();
-            Files.writeString(output.resolve("summary.json"),"{\n  \"passed\":true,\n  \"device\":"+json(device)+",\n  \"detector_config\":"+json(config.toString())+",\n  \"udf_query\":"+json(DetectorDatabase.udfScoreQuery(device,meta,config))+",\n  \"raw_query\":"+json(DetectorDatabase.rawQuery(device,meta))+",\n  \"input_first_ms\":"+meta.first()+",\n  \"input_last_ms\":"+meta.last()+",\n  \"warmup_rounds\":2,\n  \"measured_rounds\":"+repeats+",\n  \"raw_returned_rows\":"+meta.rows()+",\n  \"udf_returned_rows\":"+reference.outputRows()+",\n  \"output_rows\":"+reference.outputRows()+",\n  \"all_checksums_equal\":true,\n  \"timestamp_score_flag_sha256\":"+json(reference.sha256())+",\n  \"A_udf\":"+distribution(a)+",\n  \"B_raw_java\":"+distribution(b)+",\n  \"B_pure_algorithm\":"+distribution(algo)+",\n  \"udf_core_ms\":null,\n  \"wire_bytes\":null,\n  \"wire_bytes_note\":\"Actual protocol bytes not measured. Logical lower bounds below omit flag, framing, compression and metadata.\",\n  \"raw_timestamp_double_logical_payload_lower_bound_bytes\":"+Math.multiplyExact(meta.rows(),16L)+",\n  \"udf_timestamp_score_logical_payload_lower_bound_bytes\":"+Math.multiplyExact(reference.outputRows(),16L)+",\n  \"client_rss_bytes\":null,\n  \"server_rss_bytes\":null,\n  \"server_cpu_ns\":null,\n  \"heap_note\":\"Per-query JVM heap-used samples in timings.csv are not RSS or peak memory; CPU is client JVM process CPU, not server CPU.\",\n  \"timing_note\":\"SQL issuance through full consumption (dataset close excluded); no CSV writes. Both target one score stream. A invokes one score UDF and client derives flag as score>tau, avoiding double server evaluation. compare separately validates BOOLEAN UDF. B algorithm is sum of accept() calls (two nanoTime probes per raw row). A core not instrumented.\",\n  \"cache_note\":\"Two warmup AB/BA rounds; server/client caches not flushed; subsequent measurements are warm-cache alternating AB/BA.\",\n  \"java_version\":"+json(System.getProperty("java.version"))+",\n  \"vm_name\":"+json(System.getProperty("java.vm.name"))+",\n  \"os\":"+json(System.getProperty("os.name")+" "+System.getProperty("os.arch"))+",\n  \"available_processors\":"+Runtime.getRuntime().availableProcessors()+",\n  \"client_max_heap_bytes\":"+Runtime.getRuntime().maxMemory()+"\n}\n",StandardCharsets.UTF_8);
+            Files.writeString(output.resolve("summary.json"),"{\n  \"passed\":true,\n  \"device\":"+json(device)+",\n  \"detector_config\":"+json(config.toString())+",\n  \"udf_query\":"+json(DetectorDatabase.udfScoreQuery(device,meta,config))+",\n  \"raw_query\":"+json(DetectorDatabase.rawQuery(device,meta))+",\n  \"input_first_ms\":"+meta.first()+",\n  \"input_last_ms\":"+meta.last()+",\n  \"warmup_rounds\":2,\n  \"measured_rounds\":"+repeats+",\n  \"raw_returned_rows\":"+meta.rows()+",\n  \"udf_returned_rows\":"+reference.outputRows()+",\n  \"output_rows\":"+reference.outputRows()+",\n  \"all_checksums_equal\":true,\n  \"timestamp_score_flag_sha256\":"+json(reference.sha256())+",\n  \"A_udf\":"+distribution(a)+",\n  \"B_raw_java\":"+distribution(b)+",\n  \"B_pure_algorithm\":"+distribution(algo)+",\n  \"udf_core_ms\":null,\n  \"wire_bytes\":null,\n  \"wire_bytes_note\":\"Actual protocol bytes not measured. Logical lower bounds below omit flag, framing, compression and metadata.\",\n  \"raw_timestamp_double_logical_payload_lower_bound_bytes\":"+Math.multiplyExact(meta.rows(),16L)+",\n  \"udf_timestamp_score_logical_payload_lower_bound_bytes\":"+Math.multiplyExact(reference.outputRows(),16L)+",\n  \"client_rss_bytes\":null,\n  \"server_rss_bytes\":null,\n  \"server_cpu_ns\":null,\n  \"heap_note\":\"Per-query JVM heap-used samples in timings.csv are not RSS or peak memory; CPU is client JVM process CPU, not server CPU.\",\n  \"timing_note\":\"SQL issuance through full consumption (dataset close excluded); no CSV writes. Both target one score stream. A invokes one score UDF and client derives flag as score>selected threshold, avoiding double server evaluation. compare separately validates BOOLEAN UDF. B algorithm is sum of accept() calls (two nanoTime probes per raw row). A core not instrumented.\",\n  \"cache_note\":\"Two warmup AB/BA rounds; server/client caches not flushed; subsequent measurements are warm-cache alternating AB/BA.\",\n  \"java_version\":"+json(System.getProperty("java.version"))+",\n  \"vm_name\":"+json(System.getProperty("java.vm.name"))+",\n  \"os\":"+json(System.getProperty("os.name")+" "+System.getProperty("os.arch"))+",\n  \"available_processors\":"+Runtime.getRuntime().availableProcessors()+",\n  \"client_max_heap_bytes\":"+Runtime.getRuntime().maxMemory()+"\n}\n",StandardCharsets.UTF_8);
         } catch(Exception e) {
             Files.writeString(output.resolve("summary.json"),"{\"passed\":false,\"device\":"+json(device)+",\"error\":"+json(e.toString())+"}\n",StandardCharsets.UTF_8);
             throw e;

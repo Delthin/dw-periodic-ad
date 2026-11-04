@@ -1,100 +1,73 @@
-# 周期性监测数据的自适应异常检测
+# 周期感知与快慢互补融合异常检测
 
-数据仓库与数据挖掘课程项目。用历史同周期位置估计正常水平，以残差中位数/MAD 评分，再以有界幅度更新相位历史。同一套 Java 核心既可重放 CSV，也可作为 Apache IoTDB 2.0.11 的逐行 UDTF 执行。
+数据仓库与数据挖掘课程项目 · 第 9 组
+
+李思懿（组长）、翁汇坤
+
+本项目在 Apache IoTDB 2.0.11 Tree 模型上实现因果在线检测组件，并在 Python 中完成快慢证据融合。最终实验使用 **NAB 的 21 条真实序列、3 类业务场景、22 个测试窗口**；不把它们称为 21 个独立数据集。
+
+## 最终提交材料
+
+确认后的报告和 PPT 与代码一起存放在 [`deliverables/final/`](deliverables/final/)。
+
+| 作业要求 | 仓库中的材料 |
+| --- | --- |
+| 展示 PPT | [12 页 PPT](deliverables/final/9-李思懿-周期时间序列异常检测.pptx) · [PDF 预览](deliverables/final/9-李思懿-周期时间序列异常检测.pdf) |
+| 实现代码和说明文档 | 本仓库三个 Java 模块与 `scripts/`；[正式报告 PDF](deliverables/final/9-李思懿-周期时间序列异常检测-说明文档.pdf) · [DOCX](deliverables/final/9-李思懿-周期时间序列异常检测-说明文档.docx) · [代码使用说明](docs/最终版-代码使用说明.md) |
+| 测试用例和实验描述 | [`tests/` 和各模块测试](tests/)；[实验描述 PDF](deliverables/final/9-李思懿-周期时间序列异常检测-测试用例与实验描述.pdf) · [Markdown](docs/最终版-测试用例与实验描述.md) |
+| 来源与结果依据 | [论文与实现来源](deliverables/final/附录/论文与实现来源.md) · [候选数据来源](deliverables/final/附录/候选序列与来源.csv) · [全部逐窗口结果](deliverables/final/附录/逐窗口对比.csv) |
+
+PPT 直接在原项目汇报的 12 页页面和图形上修改，保留流程图、周期示意、公式、SQL 时序图及原版式。讲稿不是本次必交项。每组由组长提交一份。
+
+## 主要结果
+
+| 方法 | TP | FP | FN | 事件 F1 |
+| --- | ---: | ---: | ---: | ---: |
+| 最终快慢融合 | 15 | 21 | 7 | **0.5172** |
+| Isolation Forest | 13 | 28 | 9 | 0.4127 |
+| LOF | 13 | 38 | 9 | 0.3562 |
+| Spectral Residual | 12 | 89 | 10 | 0.1951 |
+| Left Matrix Profile | 12 | 55 | 10 | 0.2697 |
+
+最终融合相对自适应单路，命中总数保持 15，事件误报从 43 降至 21。具体命中窗口有所变化，点级误报率和部分子组仍未领先。NAB 已用于方法迭代，以上为开发比较，不是新盲测或通用最优结论。
+
+真实 IoTDB 对照中，AR 的 3,168 个有效评分点和周期组件的 8,976 点，四种输出均与库外逐行一致。1 万、10 万、100 万点的 AR 成本实验未观察到 UDF 加速；测量不包括 Python 融合时延。
 
 ## 代码结构
 
-| 目录 | 职责 |
-|---|---|
-| `detector-core/` | 参数、预热状态机、因果评分、三种更新策略及基线，无数据库依赖 |
-| `detector-udf/` | `PeriodicADUDTF`：IoTDB 生命周期和 score/flag 单列输出 |
-| `runner/` | CSV/batch、数据库逐点一致性、同核心 A/B 性能实验 |
-| `scripts/` | 数据准备、验证段校准、事件评价、NumPy 独立核验、系统实验 |
-| `configs/` | 固定参数、实验口径、数据来源和筛选记录 |
-| `docs/data.md` | 主数据的时间约定、哈希和转换依据 |
+- `detector-core/`：周期中位数、有界历史更新、MAD、EWMA、稳健 AR 在线评分。
+- `detector-udf/`：IoTDB Tree UDF；`score/flag/event/active` 每次调用输出其中一列。
+- `runner/`：CSV 评分、数据库一致性与执行成本对照。
+- `scripts/benchmark_iteration2.py`：统一拟合、校准、参数冻结和组件/外部基线评价。
+- `scripts/nab_fusion.py`：阈值归一化、两种均值融合及验证模式选择。
+- `scripts/run_submission_experiment.py`：从原始 NAB 数据完整重跑最终实验。
+- `scripts/reproduce_submission.py`：从离线归档的无损分数重选模式、融合并评价。
+- `configs/expanded-manifest.json`：47 条真实候选的纳入/排除原因与哈希。
 
-`data/raw/`、`data/processed/`、`results/`、`.local/` 和构建产物不进入 Git。仓库不存任务计划、AI 过程记录或汇报草稿。
+**最终融合在 Python 中完成。** Java/UDF 支持组成融合的单路组件，尚不把完整融合称为库内单次查询。`periodic_echo` 仅为历史部署探针。
 
-## 本机运行
+## 从 Git 克隆后完整重跑
 
-仓库位于 `/Volumes/SSD/projects/dw-periodic-ad`。Java 17、Python 3.12 和 Maven 已准备；IoTDB 仅监听本机。新的 macOS 环境可运行 `bash scripts/bootstrap_local.sh`，该命令会下载依赖，必要时通过 Homebrew 安装 JDK，需要预装 Homebrew 与 uv。
-
-```bash
-cd /Volumes/SSD/projects/dw-periodic-ad
-source scripts/env.sh
-mvn -B -ntp verify
-python -m unittest discover -s tests -v
-
-# 已有原始数据时仅核验；首次获取添加 --download
-python scripts/prepare_data.py
-python scripts/prepare_supplement.py
-
-# 使用已选参数重放；无需启动数据库
-java -jar runner/target/periodic-ad-runner.jar score \
-  data/processed/nyc_taxi.csv results/taxi-scores.csv configs/detector.properties
-
-# 验证段选参 → 原样重放 → 测试事件评价 + 受控机制诊断
-python scripts/experiments.py
-```
-
-完整逐点输出含 `timestamp_ms,value,baseline,residual,residual_center,scale,score,flag,update,phase`。未更新状态时 `update` 为空，不代表 0。score 是稳健标准化偏差，不是概率。
-
-## IoTDB 部署与一致性
+需要 Java 17、Maven 3.9.x、Python 3.12。安装到普通本地目录，不在云盘中编译或运行。以下命令不会启动数据库：
 
 ```bash
-bash scripts/iotdb.sh status
-# 仅服务未运行时执行；已有监听时不要重复 start
-bash scripts/iotdb.sh start
-bash scripts/deploy_detector.sh
-
-java -Xmx256m -jar runner/target/periodic-ad-runner.jar compare \
-  data/processed/nyc_taxi.csv configs/detector.properties results/database/nyc_taxi
+python3.12 -m venv .venv
+.venv/bin/python -m pip install -r requirements-lock.txt
+mvn -DskipTests package
+.venv/bin/python scripts/prepare_expanded.py --download
+.venv/bin/python scripts/run_submission_experiment.py
 ```
 
-部署脚本核对服务归属，备份同名 JAR，拒绝重复项目类，只重新注册 `periodic_ad`。`compare` 自动创建独立 UUID device、核验原始数据，比较 CSV 与 UDF 的每个时间戳、分数和布尔告警，并重复查询检查状态隔离；不删除已有数据。将输出的 `db_device=root.periodic_ad.xxx` 加入参数文件可只读复用已有序列。
+`--download` 从固定 NAB 官方版本下载并校验数据。完整入口在已有 `results/iteration2/final-nab/selection.json` 时拒绝覆盖，应使用新克隆目录。结果位于 `results/iteration2/final-nab/` 和 `results/refit-fusion/`。重新构建的 JAR 使用新的冻结指纹，不应手改旧归档的指纹。
 
-SQL 示例见 `sql/detector.sql`。单次 UDF 查询从输入历史重新建立状态，并非跨查询持续监控服务。查询必须带足预热历史，不能先按数值过滤输入。score 和 flag 是两个 UDF 实例；性能实验只查询 score，避免双算。
+原始数据、虚拟环境、编译产物、完整训练模型和中间实验日志不纳入 Git。离线“代码与数据”和“实验结果”两个 ZIP 随课程提交包提供；合并解压后，可以使用 `reproduce_submission.py` 快速回放，无需重新拟合或启动数据库。归档回放已验证 21 条序列、231 项指标一致；该结果不代表在新机器重新安装依赖和训练。
 
-## 评价口径与参数
+IoTDB 安装、部署、现有检查与离线归档说明见[代码使用说明](docs/最终版-代码使用说明.md)。全部依赖版本固定在 `requirements-lock.txt`，文档生成依赖另见 `requirements-docs.txt`。
 
-- 主数据：NAB `realKnownCause/nyc_taxi.csv`，10,320 点，30 分钟采样；7–8 月训练、9 月 1 日–10 月 15 日验证、10 月 16 日起测试。
-- `configs/experiment.json` 固定候选集合、随机种子、背景预算和事件合并间隔。验证副本使用预设扰动，幅度仅由训练段计算；真实测试标签在选参冻结后才读取。
-- 本次主方法选择 P=W=336、K=6、τ=4、c=2；2,352 点预热后输出 7,968 行，完整覆盖 5,184 个测试点。
-- 相邻告警间隔 ≤1 小时合并，按首次报警时间归属。官方窗口闭区间，每窗只记一次 TP，重复事件和窗口外事件计 FP。不做 point adjustment；不是 NAB 官方加权分数。
-- 主比较的四个基线分别选参；机制消融固定主方法参数只改变一项。测试阈值扫描仅用于诊断，不据此回选参数。
-- 原始值不插值、不删异常；时间戳决定相位。重复、倒序、离网格时间被拒绝；缺失和非有限输入跳过，允许整数倍采样间隔的缺口。
+## 来源与评价口径
 
-## 本次结果
+数据源：Numenta/NAB，固定版本 `ea702d75cc2258d9d7dd35ca8e5e2539d71f3140`，MIT 许可。仅按结构规则纳入序列，真实标签只用于评价，输入不按标签清洗。时间戳按 UTC 坐标编码，不声明原业务时区。
 
-| 方法 | 事件命中 | 重复 / 窗口外 FP | 事件 F1 |
-|---|---:|---:|---:|
-| 周期 + 有界更新 | 5/5 | 17 / 12 | 0.256 |
-| 周期 + 直接更新 | 5/5 | 18 / 13 | 0.244 |
-| 固定周期模型 | 5/5 | 23 / 57 | 0.111 |
-| 滑动中位数 / MAD | 1/5 | 0 / 0 | 0.333 |
-| 滑动均值 / 标准差 | 0/5 | 0 / 0 | 0.000 |
+评价在完整可评分历史上按 1 小时间隔合并报警，按事件起点归属测试区间和标签窗口；每窗首警为 TP，重复和窗口外事件为 FP。事件 F1 不等同于官方 NAB score，不使用 point adjustment。IF/LOF、SR、Matrix Profile/DAMP 论文与实际实现的区别均在[来源文档](docs/最终版-论文与实现来源.md)中列明。
 
-周期方法覆盖更多真实事件，有界更新的改善较小；它不是所有指标最优。相同参数下，有界比直接更新只减少 1 个窗口外事件。受控永久阶跃中三种策略最终都适应新水平，说明原始残差窗口也会改变中心，不能靠冻结相位历史保证持续报警。
-
-补充候选固定为 NAB `realAdExchange` 的 6 条与 `realTraffic` 的 7 条。先检查固定间隔、严格递增、至少 8 个训练周期，再检查训练前 40% 的日周期相关系数 ≥0.5，按路径排序最多取 3 条；不使用标签筛选。13 条均未通过结构条件，未降低门槛或修改原值，因此本次没有补充序列检测结果，不能宣称跨数据集有效。
-
-数据库内外 7,968 行时间戳、分数和 flag 完全一致；独立 NumPy 参考最大绝对差约 3.64e−12。28 个 Java、35 个 Python 测试通过。
-
-## 性能实验
-
-```bash
-python scripts/prepare_benchmark.py
-python scripts/run_system_experiments.py  # 两轮预热 + 五轮交替 AB/BA
-```
-
-A 为 SQL UDF → 完整消费 score；B 为 SQL 原始值 → 同一 Java 核心评分。二者从发出 SQL 到消费完全部结果计时，文件写入不在计时区。B 的逐点纯算法计时探针开销包含在 B 路径中。每轮比较输出数量与时间戳/score/flag 校验和。
-
-本机暖缓存中位数（毫秒）：10,320 点 A/B = 131.6/96.5；100,000 点 = 1,235.8/1,168.0；1,000,000 点 = 12,636.4/11,890.8。数据库内执行未提速。逐点返回分数的方案只减少预热部分返回行数，不能据此声称显著减少网络流量。
-
-`results/database/*/summary.json` 与 `timings.csv` 保存重复分布及口径；`process-resources.json` 的 1 秒 RSS/CPU 采样覆盖导入、核验、预热和测量整个命令，不是单条路径的峰值资源。没有测量实际协议字节数或数据库 UDF 的独立纯算法耗时。
-
-## 汇报
-
-[完整离线汇报](docs/周期异常检测项目汇报.html)包含算法细节、代码架构、实际 Java/SQL、真实数据图和结果解释。下载该 HTML 文件后用浏览器打开，图和样式均已内嵌。
-
-原始课程要求和选题报告保留在课程目录，不复制到代码仓库。
+旧项目阶段的 HTML 和其他历史文件仍保留在 Git 历史中；当前提交以 `deliverables/final/` 及 `docs/最终版-*.md` 为准。

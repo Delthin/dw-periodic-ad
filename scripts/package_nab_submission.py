@@ -24,13 +24,18 @@ def main():
     def tree(dest,path):
         for file in path.rglob('*'):
             if file.is_file() and '__pycache__' not in file.parts and file.name!='.DS_Store' and file.suffix!='.pyc':add(dest,file)
-    add(code,ROOT/'docs/最终版-代码使用说明.md','README.md')
+    READY={'最终版-代码使用说明.md':'代码使用说明.md','最终版-报告正文.md':f'{TITLE}-说明文档.md','最终版-测试用例与实验描述.md':f'{TITLE}-测试用例与实验描述.md','最终版-论文与实现来源.md':'附录/论文与实现来源.md','最终版-数据与逐窗口说明.md':'附录/数据与逐窗口说明.md'}
+    def doc(name):
+        # Prefer the rendered Markdown in deliverables/final so archives never carry template placeholders.
+        ready=ROOT/'deliverables/final'/READY[name]
+        return ready if ready.is_file() else ROOT/'docs'/name
+    add(code,doc('最终版-代码使用说明.md'),'README.md')
     for name in ['pom.xml','requirements.in','requirements-lock.txt','requirements-docs.txt']:add(code,ROOT/name)
     for module in ['detector-core','detector-udf','runner']:
         add(code,ROOT/module/'pom.xml');tree(code,ROOT/module/'src')
     for name in SCRIPTS:add(code,ROOT/'scripts'/name)
     for name in CONFIGS:add(code,ROOT/'configs'/name)
-    for name in DOCS:add(code,ROOT/'docs'/name)
+    for name in DOCS:add(code,doc(name),'docs/'+name)
     for name in ['test_evaluation.py','test_literature_baselines.py']:add(code,ROOT/'tests'/name)
     tree(code,ROOT/'tests/fixtures/pre-evidence-clip')
     add(code,ROOT/'assets/presentation-template.pptx')

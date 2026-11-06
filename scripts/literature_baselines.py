@@ -1,4 +1,4 @@
-"""Independent, causal NumPy baselines; see docs/literature-baselines-implementation.md.
+"""Independent, causal NumPy baselines.
 
 No fit, labels, global normalization, or external detector implementations are used.
 Scores belong to the last observed point of each query window.

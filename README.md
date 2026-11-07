@@ -6,12 +6,13 @@
 
 ## 提交材料
 
-只保留三件：展示 PPTX、单个 Markdown 说明文档（含测试用例与实验描述）、代码仓库。
+按课程要求保留三项：展示 PPTX、代码与说明文档、测试用例与实验描述。
 
 | 内容 | 入口 |
 | --- | --- |
 | 大作业展示 | [PPTX](https://github.com/Delthin/dw-periodic-ad/blob/HEAD/deliverables/final/9-李思懿-周期时间序列异常检测.pptx) |
-| 说明文档 | [Markdown](https://github.com/Delthin/dw-periodic-ad/blob/HEAD/deliverables/final/9-李思懿-周期时间序列异常检测-说明文档.md) |
+| 实现的代码和说明文档 | [说明文档](https://github.com/Delthin/dw-periodic-ad/blob/HEAD/deliverables/final/9-李思懿-周期时间序列异常检测-说明文档.md)、[代码仓库](https://github.com/Delthin/dw-periodic-ad) |
+| 测试用例和实验描述 | [测试用例与实验描述](https://github.com/Delthin/dw-periodic-ad/blob/HEAD/deliverables/final/9-李思懿-周期时间序列异常检测-测试用例与实验描述.md) |
 
 ## 代码入口
 

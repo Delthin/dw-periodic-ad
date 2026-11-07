@@ -10,8 +10,8 @@
 
 | 内容 | 入口 |
 | --- | --- |
-| 大作业展示 | [PPTX](deliverables/final/9-李思懿-周期时间序列异常检测.pptx) |
-| 说明文档 | [Markdown](deliverables/final/9-李思懿-周期时间序列异常检测-说明文档.md) |
+| 大作业展示 | [PPTX](https://github.com/Delthin/dw-periodic-ad/blob/HEAD/deliverables/final/9-李思懿-周期时间序列异常检测.pptx) |
+| 说明文档 | [Markdown](https://github.com/Delthin/dw-periodic-ad/blob/HEAD/deliverables/final/9-李思懿-周期时间序列异常检测-说明文档.md) |
 
 ## 代码入口
 

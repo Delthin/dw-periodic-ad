@@ -10,9 +10,9 @@
 
 | 内容 | 入口 |
 | --- | --- |
-| 大作业展示 | [PPTX](https://github.com/Delthin/dw-periodic-ad/blob/HEAD/deliverables/final/9-李思懿-周期时间序列异常检测.pptx) |
-| 实现的代码和说明文档 | [说明文档](https://github.com/Delthin/dw-periodic-ad/blob/HEAD/deliverables/final/9-李思懿-周期时间序列异常检测-说明文档.md)、[代码仓库](https://github.com/Delthin/dw-periodic-ad) |
-| 测试用例和实验描述 | [测试用例与实验描述](https://github.com/Delthin/dw-periodic-ad/blob/HEAD/deliverables/final/9-李思懿-周期时间序列异常检测-测试用例与实验描述.md) |
+| 大作业展示 | [PPTX](https://github.com/Delthin/dw-periodic-ad/blob/HEAD/deliverables/final/9-李思懿-翁汇坤-周期时间序列异常检测.pptx) |
+| 实现的代码和说明文档 | [说明文档](https://github.com/Delthin/dw-periodic-ad/blob/HEAD/deliverables/final/9-李思懿-翁汇坤-周期时间序列异常检测-说明文档.md)、[代码仓库](https://github.com/Delthin/dw-periodic-ad) |
+| 测试用例和实验描述 | [测试用例与实验描述](https://github.com/Delthin/dw-periodic-ad/blob/HEAD/deliverables/final/9-李思懿-翁汇坤-周期时间序列异常检测-测试用例与实验描述.md) |
 
 ## 代码入口
 
